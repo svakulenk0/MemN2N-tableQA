@@ -10,6 +10,7 @@ from memn2n.nn import AddTable, CrossEntropyLoss, Duplicate, ElemMult, LinearNB
 from memn2n.nn import Identity, ReLU, Sequential, LookupTable, Sum, Parallel, Softmax
 
 NSTORIES = 10000  # original: 3500
+NWORDS = 50  # maximum number of words in sentence original: 20
 
 def parse_babi_task(data_files, dictionary, include_question):
     """ Parse bAbI data.
@@ -34,10 +35,9 @@ def parse_babi_task(data_files, dictionary, include_question):
                 [index of word in question, question index] = index of word in dictionary
     """
     # Try to reserve spaces beforehand (large matrices for both 1k and 10k data sets)
-    # maximum number of words in sentence = 20
-    story     = np.zeros((20, 500, len(data_files) * NSTORIES), np.int16)
+    story     = np.zeros((NWORDS, 500, len(data_files) * NSTORIES), np.int16)
     questions = np.zeros((14, len(data_files) * 10000), np.int16)
-    qstory    = np.zeros((20, len(data_files) * 10000), np.int16)
+    qstory    = np.zeros((NWORDS, len(data_files) * 10000), np.int16)
 
     # NOTE: question's indices are not reset when going through a new story
     story_idx, question_idx, sentence_idx, max_words, max_sentences = -1, -1, -1, 0, 0
