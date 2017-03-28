@@ -1,4 +1,8 @@
-## End-To-End Memory Networks for Question Answering
+## End-To-End Memory Networks for Question Answering on Tables
+
+
+
+
 This is an implementation of MemN2N model in Python for the [bAbI question-answering tasks](http://fb.ai/babi) 
 as shown in the Section 4 of the paper "[End-To-End Memory Networks](http://arxiv.org/abs/1503.08895)". It is based on 
 Facebook's [Matlab code](https://github.com/facebook/MemNN/tree/master/MemN2N-babi-matlab).
@@ -11,16 +15,10 @@ Facebook's [Matlab code](https://github.com/facebook/MemNN/tree/master/MemN2N-ba
 ```
 $ sudo pip install -r requirements.txt
 ```
-* [bAbI dataset](http://fb.ai/babi) should be downloaded to `data/tasks_1-20_v1-2`: 
-```
-$ wget -qO- http://www.thespermwhale.com/jaseweston/babi/tasks_1-20_v1-2.tar.gz | tar xvz -C data
-```
 
 ## Usage
-* To run on a single task, use `babi_runner.py` with `-t` followed by task's id. For example,   
-```
-python babi_runner.py -t 1
-```
+* To run use `babi_runner.py`
+
 The output will look like:
 ```
 Using data from data/tasks_1-20_v1-2/en
@@ -28,14 +26,7 @@ Train and test for task 1 ...
 1 | train error: 0.876116 | val error: 0.75
 |===================================               | 71% 0.5s
 ```
-* To run on 20 tasks:
-```
-python babi_runner.py -a
-```
-* To train using all training data from 20 tasks, use the joint mode:
-```
-python babi_runner.py -j
-```
+
 
 ## Question Answering Demo
 * In order to run the Web-based demo using the pretrained model `memn2n_model.pklz` in `trained_model/`, run:
@@ -55,15 +46,50 @@ python -m demo.qa -train
 
 * To show all options, run `python -m demo.qa -h`
 
+
+## Experiments
+
+1. Synthetic patterns
+```
+* Data
+```
+Cell-based
+
+1 Row1 City Klagenfurt
+2 Row1 Immigration 19
+3 Row1 Emmigration 10
+4 Row2 City Feldkirch
+5 Row2 Immigration 12
+6 Row2 Emmigration 14
+7 What is the Emmigration in Klagenfurt?	10	1 3
+
+Vocab size: 29 unique words
+Story max length: 18 words
+Query max length: 7 words
+Number of training samples: 10000
+Number of test samples: 500
+
+* Results
+
+100 | train error: 0 | val error: 0
+Test error: 0.000000
+Finished in 21185.1s (MacAir)
+
+
+2. Simulated data
+```
+Based on a real table (limiting vocabulary size and producing more training examples)
+
+* Data
+
+* Results
+
+
 ## Benchmarks
 See the results [here](https://github.com/vinhkhuc/MemN2N-babi-python/tree/master/bechmarks).
 
-### Author
-Vinh Khuc
-
-### Future Plans
-* Port to TensorFlow/Keras
-* Support Python 3
+### Acknowledgment
+Based on [Vinh Khuc's implementation of MemN2N for babi tasks]().
 
 ### References
 * Sainbayar Sukhbaatar, Arthur Szlam, Jason Weston, Rob Fergus, 
