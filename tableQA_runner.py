@@ -41,10 +41,13 @@ def run_tableQA(data_path):
 
 
 if __name__ == "__main__":
-    # Check if data is available
     # data_path = './data/synth_data_{}.txt'
-    data_path = './data/sim_data_{}.txt'
+    # data_path = './data/sim_data_{}.txt'
+    data_path = './data/table_data_{}.txt'
+
+    # Check if data is available
     # if not os.path.exists(data_dir):
     #     print("The data directory '%s' does not exist. Please download it first." % data_dir)
     #     sys.exit(1)
+    
     run_tableQA(data_path)

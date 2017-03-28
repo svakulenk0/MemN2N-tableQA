@@ -84,12 +84,15 @@ Based on a real table (limiting vocabulary size and producing more training exam
 
 * Results
 
+100 | train error: 0.0547153 | val error: 0.0917339
+Test error: 0.058393
+
 
 ## Benchmarks
 See the results [here](https://github.com/vinhkhuc/MemN2N-babi-python/tree/master/bechmarks).
 
 ### Acknowledgment
-Based on [Vinh Khuc's implementation of MemN2N for babi tasks]().
+Based on [Vinh Khuc's implementation of MemN2N for babi tasks](https://github.com/vinhkhuc/MemN2N-babi-python).
 
 ### References
 * Sainbayar Sukhbaatar, Arthur Szlam, Jason Weston, Rob Fergus, 
