@@ -50,9 +50,9 @@ python -m demo.qa -train
 ## Experiments
 
 1. Synthetic patterns
-```
+
 * Data
-```
+
 Cell-based
 
 1 Row1 City Klagenfurt
@@ -77,7 +77,7 @@ Finished in 21185.1s (MacAir)
 
 
 2. Simulated data
-```
+
 Based on a real table (limiting vocabulary size and producing more training examples)
 
 * Data
