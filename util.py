@@ -9,6 +9,7 @@ from memn2n.memory import MemoryL, MemoryBoW
 from memn2n.nn import AddTable, CrossEntropyLoss, Duplicate, ElemMult, LinearNB
 from memn2n.nn import Identity, ReLU, Sequential, LookupTable, Sum, Parallel, Softmax
 
+NSTORIES = 10000  # original: 3500
 
 def parse_babi_task(data_files, dictionary, include_question):
     """ Parse bAbI data.
@@ -34,7 +35,7 @@ def parse_babi_task(data_files, dictionary, include_question):
     """
     # Try to reserve spaces beforehand (large matrices for both 1k and 10k data sets)
     # maximum number of words in sentence = 20
-    story     = np.zeros((20, 500, len(data_files) * 3500), np.int16)
+    story     = np.zeros((20, 500, len(data_files) * NSTORIES), np.int16)
     questions = np.zeros((14, len(data_files) * 10000), np.int16)
     qstory    = np.zeros((20, len(data_files) * 10000), np.int16)
 
@@ -82,7 +83,7 @@ def parse_babi_task(data_files, dictionary, include_question):
 
                     if max_words < k:
                         max_words = k
-
+                    # print sentence_idx, story_idx
                     if not is_question:
                         story[k - 1, sentence_idx, story_idx] = dictionary[w]
                     else:
