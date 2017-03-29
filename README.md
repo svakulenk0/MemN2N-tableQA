@@ -75,6 +75,8 @@ Number of test samples: 500
 Test error: 0.000000
 Finished in 21185.1s (MacAir)
 
+also on smaller dataset!
+Finished in 57.6s (MacAir)
 
 2. Simulated data
 
