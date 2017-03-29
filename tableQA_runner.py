@@ -49,7 +49,8 @@ def run_tableQA(data_path, model_file):
 
 
 if __name__ == "__main__":
-    data_path = './data/test_data_{}.txt'
+    dataset = 'test'
+    # data_path = './data/test_data_{}.txt'
     # data_path = './data/synth_data_{}.txt'
     # data_path = './data/sim_data_{}.txt'
     # data_path = './data/table_data_{}.txt'
@@ -58,5 +59,5 @@ if __name__ == "__main__":
     # if not os.path.exists(data_dir):
     #     print("The data directory '%s' does not exist. Please download it first." % data_dir)
     #     sys.exit(1)
-    
-    run_tableQA(data_path, './trained_model/memn2n_table_qa_model.pklz')
+    data_path = './data/%s_data_{}.txt' % dataset
+    run_tableQA(data_path, './trained_model/memn2n_table_qa_model_%s.pklz' % dataset)

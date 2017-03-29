@@ -19,9 +19,14 @@ class MemN2N(object):
     """
     MemN2N class
     """
-    def __init__(self, data_dir, model_file):
+    def __init__(self, data_dir, model_file, dataset='test'):
         self.data_dir       = data_dir
-        self.model_file     = model_file
+        self.data_path      = './data/%s_data_{}.txt' % dataset
+        # self.data_path = './data/synth_data_{}.txt'
+        # self.data_path = './data/sim_data_{}.txt'
+        # self.data_path = './data/table_data_{}.txt'
+        self.model_file     = './trained_model/memn2n_table_qa_model_%s.pklz' % dataset
+        # self.model_file     = model_file
         self.reversed_dict  = None
         self.memory         = None
         self.model          = None
@@ -46,16 +51,20 @@ class MemN2N(object):
         Train MemN2N model using training data for tasks.
         """
         np.random.seed(42)  # for reproducing
-        assert self.data_dir is not None, "data_dir is not specified."
-        print("Reading data from %s ..." % self.data_dir)
+        # assert self.data_dir is not None, "data_dir is not specified."
+        # print("Reading data from %s ..." % self.data_dir)
 
+        # Parse data
+        train_data_path = glob.glob(self.data_path.format('train'))
+        test_data_path  = glob.glob(self.data_path.format('test'))
+        
         # Parse training data
-        train_data_path = glob.glob('%s/qa*_*_train.txt' % self.data_dir)
+        # train_data_path = glob.glob('%s/qa*_*_train.txt' % self.data_dir)
         dictionary = {"nil": 0}
         train_story, train_questions, train_qstory = parse_babi_task(train_data_path, dictionary, False)
 
         # Parse test data just to expand the dictionary so that it covers all words in the test data too
-        test_data_path = glob.glob('%s/qa*_*_test.txt' % self.data_dir)
+        # test_data_path = glob.glob('%s/qa*_*_test.txt' % self.data_dir)
         parse_babi_task(test_data_path, dictionary, False)
 
         # Get reversed dictionary mapping index to word
@@ -186,8 +195,9 @@ def run_console_demo(data_dir, model_file):
     memn2n.load_model()
 
     # Read test data
-    print("Reading test data from %s ..." % memn2n.data_dir)
-    test_data_path = glob.glob('%s/qa*_*_test.txt' % memn2n.data_dir)
+    # print("Reading test data from %s ..." % memn2n.data_dir)
+    # test_data_path = glob.glob('%s/qa*_*_test.txt' % memn2n.data_dir)
+    test_data_path  = glob.glob(memn2n.data_path.format('test'))
     test_story, test_questions, test_qstory = \
         parse_babi_task(test_data_path, memn2n.general_config.dictionary, False)
 
@@ -244,7 +254,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--data-dir", default="data/tasks_1-20_v1-2/en",
                         help="path to dataset directory (default: %(default)s)")
-    parser.add_argument("-m", "--model-file", default="trained_model/memn2n_model.pklz",
+    # parser.add_argument("-m", "--model-file", default="trained_model/memn2n_model.pklz",
+    parser.add_argument("-m", "--model-file", default="trained_model/memn2n_table_qa_model.pklz",
                         help="model file (default: %(default)s)")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-train", "--train", action="store_true",
