@@ -22,8 +22,9 @@ def init(data_dir, model_file):
     memn2n.load_model()
 
     # Read test data
-    print("Reading test data from %s ..." % memn2n.data_dir)
-    test_data_path = glob.glob('%s/qa*_*_test.txt' % memn2n.data_dir)
+    # print("Reading test data from %s ..." % memn2n.data_dir)
+    # test_data_path = glob.glob('%s/qa*_*_test.txt' % memn2n.data_dir)
+    test_data_path  = glob.glob(memn2n.data_path.format('test'))
     test_story, test_questions, test_qstory = \
         parse_babi_task(test_data_path, memn2n.general_config.dictionary, False)
 
