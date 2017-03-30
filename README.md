@@ -109,7 +109,7 @@ Based on a real table (limiting vocabulary size and producing more training exam
 * Results
 
 100 | train error: 0.0547153 | val error: 0.0917339
-Test error: 0.058393
+Test error: 0.087500
 
 3. Real data
 
