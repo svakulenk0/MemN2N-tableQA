@@ -15,7 +15,11 @@ Test scripts for Python port of FastText
 
 import fasttext
 
-model = fasttext.load_model('./embeddings/enwik9')
+EMBEDDINGS_MODEL = 'enwik9'
+print "Loading", EMBEDDINGS_MODEL
+model = fasttext.load_model('./embeddings/'+EMBEDDINGS_MODEL)
+print "Finished loading"
+
 print len(model.words) # number of words in dictionary
 print model['king'] # get the vector of the word 'king'
 print model['kingserwq'] # get the vector for an OOV word
