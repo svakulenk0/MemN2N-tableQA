@@ -14,7 +14,7 @@ $ sudo pip install -r requirements.txt
 
 ## Usage
 
-* Load fastText embeddings
+* Provide the correct path to the pre-trained fastText model (clone fastText Github repository and run ./word-vector-example.sh to train a model on the English Wikipedia)
 
 * To train and evaluate the model use `tableQA_runner.py`
 
