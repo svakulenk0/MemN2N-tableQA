@@ -18,7 +18,7 @@ seed_val = 42
 random.seed(seed_val)
 np.random.seed(seed_val)  # for reproducing
 
-EMBEDDINGS_MODEL = 'enwik9'
+EMBEDDINGS_MODEL_PATH = '../fastText/result/fil9.bin'
 
 
 def run_tableQA(data_path, model_file):
@@ -31,9 +31,9 @@ def run_tableQA(data_path, model_file):
     test_files  = glob.glob(data_path.format('test'))
     # SV: init dict with pre-trained vectors, e.g. from fastText
     # dictionary = fasttext.load_model('./embeddings/fil9.bin')
-    print "Loading", EMBEDDINGS_MODEL
-    dictionary = fasttext.load_model('./embeddings/'+EMBEDDINGS_MODEL)
-    print "Finished loading"
+    # print "Loading model from", EMBEDDINGS_MODEL_PATH
+    dictionary = fasttext.load_model(EMBEDDINGS_MODEL_PATH)
+    # print "Finished loading"
     # dictionary = {"nil": 0}
     train_story, train_questions, train_qstory = parse_babi_task(train_files, dictionary, False)
     test_story, test_questions, test_qstory    = parse_babi_task(test_files, dictionary, False)
