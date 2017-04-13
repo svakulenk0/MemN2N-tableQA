@@ -49,7 +49,7 @@ python -m demo.qa -train
 
 ## Experiments
 
-1. Synthetic patterns
+1. Synthetic patterns (synth)
 
 * Data
 
@@ -78,7 +78,7 @@ Finished in 21185.1s (MacAir)
 also on smaller dataset!
 Finished in 57.6s (MacAir)
 
-2. Simulated data
+2. Simulated data (sim)
 
 Based on a real table (limiting vocabulary size and producing more training examples)
 
@@ -111,7 +111,7 @@ Based on a real table (limiting vocabulary size and producing more training exam
 100 | train error: 0.0547153 | val error: 0.0917339
 Test error: 0.087500
 
-3. Real data
+3. Real data (table)
 
 Sample CSV table transformed into babi-format.
 
@@ -173,7 +173,9 @@ Test error: 0.189338
 See the results [here](https://github.com/vinhkhuc/MemN2N-babi-python/tree/master/bechmarks).
 
 ### Acknowledgment
-Based on [Vinh Khuc's implementation of MemN2N for babi tasks](https://github.com/vinhkhuc/MemN2N-babi-python).
+
+* Based on [Vinh Khuc: MemN2N for babi tasks](https://github.com/vinhkhuc/MemN2N-babi-python).
+* + [YerevaNN: Dynamic-memory-networks-in-Theano](https://github.com/YerevaNN/Dynamic-memory-networks-in-Theano)
 
 ### References
 * Sainbayar Sukhbaatar, Arthur Szlam, Jason Weston, Rob Fergus, 
