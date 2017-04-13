@@ -38,9 +38,7 @@ class BabiConfig(object):
             "in_dim"       : 20,
             "out_dim"      : 20,
             "sz"           : min(50, train_story.shape[1]),  # number of sentences
-            # "voc_sz"       : len(self.dictionary),
-            # SV replace vocabulary size with fastText model pre-trained number of words
-            "voc_sz"       : len(self.dictionary.words),
+            "voc_sz"       : len(self.dictionary),
             "bsz"          : self.batch_size,
             "max_words"    : len(train_story),
             "weight"       : None

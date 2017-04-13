@@ -43,8 +43,7 @@ def train(train_story, train_questions, train_qstory, memory, model, loss, gener
             input_data  = np.zeros((train_story.shape[0], batch_size), np.float32) # words of training questions
             target_data = train_questions[2, batch]                                # indices of training answers
 
-            # SV
-            # memory[0].data[:] = dictionary["nil"]
+            memory[0].data[:] = dictionary["nil"]
 
             # Compose batch of training data
             for b in range(batch_size):
@@ -69,13 +68,11 @@ def train(train_story, train_questions, train_qstory, memory, model, loss, gener
                         rt[rt >= train_config["sz"]] = train_config["sz"] - 1 # put the cap
 
                         # Add random time (must be > dictionary's length) into the time word (decreasing order)
-                        # SV replace vocabulary size with fastText model pre-trained number of words
-                        memory[0].data[-1, :d.shape[1], b] = np.sort(rt[:d.shape[1]])[::-1] + len(dictionary.words)
+                        memory[0].data[-1, :d.shape[1], b] = np.sort(rt[:d.shape[1]])[::-1] + len(dictionary)
 
                     else:
-                        # SV replace vocabulary size with fastText model pre-trained number of words
                         memory[0].data[-1, :d.shape[1], b] = \
-                            np.arange(d.shape[1])[::-1] + len(dictionary.words)
+                            np.arange(d.shape[1])[::-1] + len(dictionary)
 
                 input_data[:, b] = train_qstory[:, batch[b]]
 
@@ -104,9 +101,7 @@ def train(train_story, train_questions, train_qstory, memory, model, loss, gener
             input_data  = np.zeros((train_story.shape[0], batch_size), np.float32)
             target_data = train_questions[2, batch]
 
-            # memory[0].data[:] = dictionary["nil"]
-            # SV init
-            memory[0].data[:] = 0
+            memory[0].data[:] = dictionary["nil"]
 
             for b in range(batch_size):
                 d = train_story[:, :(1 + train_questions[1, batch[b]]), train_questions[0, batch[b]]]
@@ -118,8 +113,7 @@ def train(train_story, train_questions, train_qstory, memory, model, loss, gener
                 memory[0].data[:d.shape[0], :d.shape[1], b] = d
 
                 if enable_time:
-                    # SV
-                    memory[0].data[-1, :d.shape[1], b] = np.arange(d.shape[1])[::-1] + len(dictionary.words)
+                    memory[0].data[-1, :d.shape[1], b] = np.arange(d.shape[1])[::-1] + len(dictionary)
 
                 input_data[:, b] = train_qstory[:, batch[b]]
 
@@ -190,7 +184,6 @@ def test(test_story, test_questions, test_qstory, memory, model, loss, general_c
         input_data = np.zeros((max_words, batch_size), np.float32)
         target_data = test_questions[2, batch]
 
-        # SV
         input_data[:]     = dictionary["nil"]
         memory[0].data[:] = dictionary["nil"]
 
@@ -203,8 +196,7 @@ def test(test_story, test_questions, test_qstory, memory, model, loss, general_c
             memory[0].data[:d.shape[0], :d.shape[1], b] = d
 
             if enable_time:
-                # SV
-                memory[0].data[-1, :d.shape[1], b] = np.arange(d.shape[1])[::-1] + len(dictionary.words) # time words
+                memory[0].data[-1, :d.shape[1], b] = np.arange(d.shape[1])[::-1] + len(dictionary) # time words
 
             input_data[:test_qstory.shape[0], b] = test_qstory[:, batch[b]]
 
