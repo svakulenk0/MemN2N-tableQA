@@ -166,12 +166,16 @@ class MemN2N(object):
                     # resolve it with one of the vocabulary words
                     # iterate over and compare vector with each word in the dictionary
                     # init nn search
+                    # TODO optimize cosine_similarity comparison on a matrix
                     nn = None
                     max_cosine = 0
                     for word, dict_vector in self.dict_vectors.items():
-                        if cosine_similarity(word_vector, dict_vector)[0][0] > max_cosine:
+                        cosine = cosine_similarity(word_vector, dict_vector)[0][0]
+                        if cosine > max_cosine:
                             nn = word
+                            max_cosine = cosine
                     encoded_user_question[ix] = dictionary[word]
+                    print w, 'recognized as', nn
 
         # Input data and data for the 1st memory cell
         # Here we duplicate input_data to fill the whole batch
