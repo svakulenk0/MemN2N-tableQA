@@ -10,21 +10,26 @@ import pickle
 import argparse
 import numpy as np
 
+# SV
+import fasttext
+from sklearn.metrics.pairwise import cosine_similarity
+
 from config import BabiConfigJoint
 from train_test import train, train_linear_start
 from util import parse_babi_task, build_model
+
+EMBEDDINGS_MODEL_PATH = '../fastText/result/fil9.bin'
 
 
 class MemN2N(object):
     """
     MemN2N class
     """
-    def __init__(self, data_dir, model_file, dataset='test'):
+    def __init__(self, data_dir, model_file, dataset='sim'):
+        # specify pre-trained models to load in the interface
+        # and the sample dataset for evaluation: test sim synth table
         self.data_dir       = data_dir
         self.data_path      = './data/%s_data_{}.txt' % dataset
-        # self.data_path = './data/synth_data_{}.txt'
-        # self.data_path = './data/sim_data_{}.txt'
-        # self.data_path = './data/table_data_{}.txt'
         self.model_file     = './trained_model/memn2n_table_qa_model_%s.pklz' % dataset
         # self.model_file     = model_file
         self.reversed_dict  = None
@@ -32,6 +37,12 @@ class MemN2N(object):
         self.model          = None
         self.loss           = None
         self.general_config = None
+        # SV load model to embed OOV words
+        print("Loading word embeddings model")
+        self.word_model = fasttext.load_model(EMBEDDINGS_MODEL_PATH)
+        # SV keep word vectors for all the dictionary words
+        self.dict_vectors = {}
+
 
     def save_model(self):
         with gzip.open(self.model_file, "wb") as f:
@@ -42,7 +53,7 @@ class MemN2N(object):
         # Check if model was loaded
         if self.reversed_dict is None or self.memory is None or \
                 self.model is None or self.loss is None or self.general_config is None:
-            print("Loading model from file %s ..." % self.model_file)
+            print("Loading MemNN-QA model from file %s ..." % self.model_file)
             with gzip.open(self.model_file, "rb") as f:
                 self.reversed_dict, self.memory, self.model, self.loss, self.general_config = pickle.load(f)
 
@@ -60,6 +71,7 @@ class MemN2N(object):
         
         # Parse training data
         # train_data_path = glob.glob('%s/qa*_*_train.txt' % self.data_dir)
+        # init dict with pre-trained vectors, e.g. from fastText
         dictionary = {"nil": 0}
         train_story, train_questions, train_qstory = parse_babi_task(train_data_path, dictionary, False)
 
@@ -122,6 +134,7 @@ class MemN2N(object):
             if not enable_time else train_config["max_words"] - 1
 
         input_data = np.zeros((max_words, batch_size), np.float32)
+        # init with 0
         input_data[:] = dictionary["nil"]
         self.memory[0].data[:] = dictionary["nil"]
 
@@ -130,6 +143,7 @@ class MemN2N(object):
                                                         question_idx, story_idx, last_sentence_idx)
         user_question_provided = user_question != '' and user_question != suggested_question
         encoded_user_question = None
+        # new question different from test data
         if user_question_provided:
             # print("User question = '%s'" % user_question)
             user_question = user_question.strip()
@@ -145,6 +159,19 @@ class MemN2N(object):
                     encoded_user_question[ix] = dictionary[w]
                 else:
                     print("WARNING - The word '%s' is not in dictionary." % w)
+                    # SV deal with OOV words!
+                    # look it up in fasttext
+                    word_vector = self.word_model[w]
+                    print 'fastText embedding:', word_vector
+                    # resolve it with one of the vocabulary words
+                    # iterate over and compare vector with each word in the dictionary
+                    # init nn search
+                    nn = None
+                    max_cosine = 0
+                    for word, dict_vector in self.dict_vectors.items():
+                        if cosine_similarity(word_vector, dict_vector)[0][0] > max_cosine:
+                            nn = word
+                    encoded_user_question[ix] = dictionary[word]
 
         # Input data and data for the 1st memory cell
         # Here we duplicate input_data to fill the whole batch

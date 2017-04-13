@@ -21,6 +21,12 @@ def init(data_dir, model_file):
     memn2n = MemN2N(data_dir, model_file)
     memn2n.load_model()
 
+    # SV create word vectors for all the dictionary words
+    print("Embedding dictionary words")
+    for word in memn2n.general_config.dictionary.keys():
+        # SV assign vector to each word in the dictionary
+        memn2n.dict_vectors[word] = memn2n.word_model[word]
+
     # Read test data
     # print("Reading test data from %s ..." % memn2n.data_dir)
     # test_data_path = glob.glob('%s/qa*_*_test.txt' % memn2n.data_dir)
