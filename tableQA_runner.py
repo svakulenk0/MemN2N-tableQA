@@ -28,7 +28,8 @@ def run_tableQA(data_path, model_file):
     train_files = glob.glob(data_path.format('train'))
     test_files  = glob.glob(data_path.format('test'))
     # SV: init dict with pre-trained vectors, e.g. from fastText
-    dictionary = fasttext.load_model('./embeddings/fil9.bin')
+    # dictionary = fasttext.load_model('./embeddings/fil9.bin')
+    dictionary = fasttext.load_model('./embeddings/enwik9')
     # dictionary = {"nil": 0}
     train_story, train_questions, train_qstory = parse_babi_task(train_files, dictionary, False)
     test_story, test_questions, test_qstory    = parse_babi_task(test_files, dictionary, False)
