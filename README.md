@@ -10,7 +10,10 @@ $ sudo pip install -r requirements.txt
 ```
 
 ## Usage
-* To run use `tableQA_runner.py`
+
+* Load fastText embeddings
+
+* To train and evaluate the model use `tableQA_runner.py`
 
 
 
@@ -157,9 +160,9 @@ Test error: 0.189338
 ### Acknowledgment
 
 * Based on [Vinh Khuc: MemN2N for babi tasks](https://github.com/vinhkhuc/MemN2N-babi-python).
-* + [YerevaNN: Dynamic-memory-networks-in-Theano](https://github.com/YerevaNN/Dynamic-memory-networks-in-Theano)
+* [YerevaNN: Dynamic-memory-networks-in-Theano](https://github.com/YerevaNN/Dynamic-memory-networks-in-Theano)
 
 ### References
 * Sainbayar Sukhbaatar, Arthur Szlam, Jason Weston, Rob Fergus, 
-  "[End-To-End Memory Networks](http://arxiv.org/abs/1503.08895)",
-  *arXiv:1503.08895 [cs.NE]*.
+  [End-To-End Memory Networks](http://arxiv.org/abs/1503.08895)
+* Kumar et al. [Dynamic memory networks](http://arxiv.org/abs/1506.07285)
