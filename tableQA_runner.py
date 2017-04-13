@@ -55,7 +55,8 @@ def run_tableQA(data_path, model_file):
 
 if __name__ == "__main__":
     dataset = 'test'
-    # test - small subset of synthetic data
+    # test - small subset of synthetic data 
+    # original MemN2N performance ::: train error: 0 | val error: 0 Test error: 0.000000
     # synth - larger set with synthetic data
     # sim - simulated data, generated using real table data but with artificially reduced domain variance
     # table - real table data extracted from a random open data csv file
