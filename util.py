@@ -11,6 +11,54 @@ from memn2n.nn import Identity, ReLU, Sequential, LookupTable, Sum, Parallel, So
 
 NSTORIES = 10000  # original: 3500
 NWORDS = 50  # maximum number of words in sentence original: 20
+WORD_VEC_DIM = 100  # loading 100 dimensional fastText word embeddings 
+
+
+def _process_input(self, data_raw):
+    '''
+    from https://github.com/YerevaNN/Dynamic-memory-networks-in-Theano
+    '''
+    questions = []
+    inputs = []
+    answers = []
+    input_masks = []
+    for x in data_raw:
+        inp = x["C"].lower().split(' ') 
+        inp = [w for w in inp if len(w) > 0]
+        q = x["Q"].lower().split(' ')
+        q = [w for w in q if len(w) > 0]
+        
+        inp_vector = [utils.process_word(word = w, 
+                                    word2vec = self.word2vec, 
+                                    vocab = self.vocab, 
+                                    ivocab = self.ivocab, 
+                                    word_vector_size = self.word_vector_size, 
+                                    to_return = "word2vec") for w in inp]
+                                    
+        q_vector = [utils.process_word(word = w, 
+                                    word2vec = self.word2vec, 
+                                    vocab = self.vocab, 
+                                    ivocab = self.ivocab, 
+                                    word_vector_size = self.word_vector_size, 
+                                    to_return = "word2vec") for w in q]
+        
+        inputs.append(np.vstack(inp_vector).astype(floatX))
+        questions.append(np.vstack(q_vector).astype(floatX))
+        answers.append(utils.process_word(word = x["A"], 
+                                        word2vec = self.word2vec, 
+                                        vocab = self.vocab, 
+                                        ivocab = self.ivocab, 
+                                        word_vector_size = self.word_vector_size, 
+                                        to_return = "index"))
+        # NOTE: here we assume the answer is one word! 
+        if self.input_mask_mode == 'word':
+            input_masks.append(np.array([index for index, w in enumerate(inp)], dtype=np.int32)) 
+        elif self.input_mask_mode == 'sentence': 
+            input_masks.append(np.array([index for index, w in enumerate(inp) if w == '.'], dtype=np.int32)) 
+        else:
+            raise Exception("invalid input_mask_mode")
+    
+    return inputs, questions, answers, input_masks
 
 def parse_babi_task(data_files, dictionary, include_question):
     """ Parse bAbI data.
@@ -35,9 +83,15 @@ def parse_babi_task(data_files, dictionary, include_question):
                 [index of word in question, question index] = index of word in dictionary
     """
     # Try to reserve spaces beforehand (large matrices for both 1k and 10k data sets)
-    story     = np.zeros((NWORDS, 500, len(data_files) * NSTORIES), np.int16)
-    questions = np.zeros((14, len(data_files) * 10000), np.int16)
-    qstory    = np.zeros((NWORDS, len(data_files) * 10000), np.int16)
+    # each word is represented with a vector not an id
+    # story     = np.zeros((NWORDS, 500, len(data_files) * NSTORIES), np.int16)
+    # questions = np.zeros((14, len(data_files) * 10000), np.int16)
+    # qstory    = np.zeros((NWORDS, len(data_files) * 10000), np.int16)
+
+    # SV: remove limitations on the size of the input matrices
+    story = np.zeros((WORD_VEC_DIM, 500, len(data_files) * NSTORIES), np.int16)
+    questions = np.zeros((WORD_VEC_DIM, len(data_files) * 10000), np.int16)
+    qstory = np.zeros((WORD_VEC_DIM, len(data_files) * 10000), np.int16)
 
     # NOTE: question's indices are not reset when going through a new story
     story_idx, question_idx, sentence_idx, max_words, max_sentences = -1, -1, -1, 0, 0
@@ -64,8 +118,13 @@ def parse_babi_task(data_files, dictionary, include_question):
                 else:
                     is_question = True
                     question_idx += 1
-                    questions[0, question_idx] = story_idx
-                    questions[1, question_idx] = sentence_idx
+                    # questions[0, question_idx] = story_idx
+                    # questions[1, question_idx] = sentence_idx
+
+                    # SV: collect story_idx and sentence_idx pointers into a single array
+                    # questions.append(story_idx)
+                    # questions.append(sentence_idx)
+
                     if include_question:
                         sentence_idx += 1
 
@@ -77,41 +136,67 @@ def parse_babi_task(data_files, dictionary, include_question):
 
                     if w.endswith('.') or w.endswith('?'):
                         w = w[:-1]
-
-                    if w not in dictionary:
-                        dictionary[w] = len(dictionary)
+                    # SV: fastText generates OOV words as well
+                    # if w not in dictionary:
+                    #     dictionary[w] = len(dictionary)
 
                     if max_words < k:
                         max_words = k
                     # print sentence_idx, story_idx
                     if not is_question:
-                        story[k - 1, sentence_idx, story_idx] = dictionary[w]
+                        # look up word in a dictionary
+                        # print dictionary[w]
+                        # story[k - 1, sentence_idx, story_idx] = dictionary[w]
+                        # SV: just collect all word vectors into a single array
+                        # SV: save 1 word vector
+                        story[:, sentence_idx, story_idx] = dictionary[w]
                     else:
-                        qstory[k - 1, question_idx] = dictionary[w]
+                        # qstory[k - 1, question_idx] = dictionary[w]
+                        # SV: just collect all word vectors into a single array
+                        # SV: save 1 word vector
+                        qstory[:, question_idx] = dictionary[w]
+
                         if include_question:
-                            story[k - 1, sentence_idx, story_idx] = dictionary[w]
+                            # story[k - 1, sentence_idx, story_idx] = dictionary[w]
+                            # SV: just collect all word vectors into a single array
+                            # story.append(dictionary[w])
+                            # SV: save 1 word vector
+                            story[:, sentence_idx, story_idx] = dictionary[w]
+
 
                         # NOTE: Punctuation is already removed from w
                         if words[k].endswith('?'):
                             answer = words[k + 1]
-                            if answer not in dictionary:
-                                dictionary[answer] = len(dictionary)
+                            # SV: fastText generates OOV words as well
+                            # if answer not in dictionary:
+                            #     dictionary[answer] = len(dictionary)
 
-                            questions[2, question_idx] = dictionary[answer]
+                            # questions[2, question_idx] = dictionary[answer]
+                            # SV: just collect all word vectors into a single array
+                            # SV: save 1 word vector
+                            questions[:, question_idx] = dictionary[answer]
+                            # print questions
 
+                            # SV: what is this line for?
                             # Indices of supporting sentences
-                            for h in range(k + 2, len(words)):
-                                questions[1 + h - k, question_idx] = mapping[int(words[h]) - 1]
+                            # for h in range(k + 2, len(words)):
+                            #     questions[1 + h - k, question_idx] = mapping[int(words[h]) - 1]
 
-                            questions[-1, question_idx] = line_idx
+
+                            # questions[-1, question_idx] = line_idx
+                            # SV: collect story_idx and sentence_idx pointers into a single array
+                            # questions.append(line_idx)
                             break
 
                 if max_sentences < sentence_idx + 1:
                     max_sentences = sentence_idx + 1
 
-    story     = story[:max_words, :max_sentences, :(story_idx + 1)]
+    # SV: skip trimming
+    # story     = story[:max_words, :max_sentences, :(story_idx + 1)]
+    story     = story[:, :, :(story_idx + 1)]
     questions = questions[:, :(question_idx + 1)]
-    qstory    = qstory[:max_words, :(question_idx + 1)]
+    # qstory    = qstory[:max_words, :(question_idx + 1)]
+    qstory    = qstory[:, :(question_idx + 1)]
 
     return story, questions, qstory
 
@@ -173,7 +258,9 @@ def build_model(general_config):
             memory[i] = MemoryL(train_config)
 
         # Override nil_word which is initialized in "self.nil_word = train_config["voc_sz"]"
-        memory[i].nil_word = dictionary['nil']
+        # memory[i].nil_word = dictionary['nil']
+        # SV
+        memory[i].nil_word = 0
         model.add(Duplicate())
         p = Parallel()
         p.add(memory[i])

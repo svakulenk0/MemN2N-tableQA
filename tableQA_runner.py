@@ -12,6 +12,8 @@ from config import BabiConfig, BabiConfigJoint
 from train_test import train, train_linear_start, test
 from util import parse_babi_task, build_model
 
+import fasttext
+
 seed_val = 42
 random.seed(seed_val)
 np.random.seed(seed_val)  # for reproducing
@@ -25,11 +27,12 @@ def run_tableQA(data_path, model_file):
     # Parse data
     train_files = glob.glob(data_path.format('train'))
     test_files  = glob.glob(data_path.format('test'))
-
-    dictionary = {"nil": 0}
+    # SV: init dict with pre-trained vectors, e.g. from fastText
+    dictionary = fasttext.load_model('./embeddings/fil9.bin')
+    # dictionary = {"nil": 0}
     train_story, train_questions, train_qstory = parse_babi_task(train_files, dictionary, False)
     test_story, test_questions, test_qstory    = parse_babi_task(test_files, dictionary, False)
-
+    # print train_story
     general_config = BabiConfig(train_story, train_questions, dictionary)
 
     memory, model, loss = build_model(general_config)
@@ -50,14 +53,9 @@ def run_tableQA(data_path, model_file):
 
 if __name__ == "__main__":
     dataset = 'test'
-    # data_path = './data/test_data_{}.txt'
-    # data_path = './data/synth_data_{}.txt'
-    # data_path = './data/sim_data_{}.txt'
-    # data_path = './data/table_data_{}.txt'
-
-    # Check if data is available
-    # if not os.path.exists(data_dir):
-    #     print("The data directory '%s' does not exist. Please download it first." % data_dir)
-    #     sys.exit(1)
+    # test - small subset of synthetic data
+    # synth - larger set with synthetic data
+    # sim - simulated data, generated using real table data but with artificially reduced domain variance
+    # table - real table data extracted from a random open data csv file
     data_path = './data/%s_data_{}.txt' % dataset
     run_tableQA(data_path, './trained_model/memn2n_table_qa_model_%s.pklz' % dataset)

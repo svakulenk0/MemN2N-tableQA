@@ -20,7 +20,9 @@ class Memory(Module):
 
         # TODO: Mark self.nil_word and self.data as None since they will be overriden eventually
         # In build.model.py, memory[i].nil_word = dictionary['nil']"
-        self.nil_word  = train_config["voc_sz"]
+        # self.nil_word  = train_config["voc_sz"]
+        # SV init
+        self.nil_word  = 0
         self.config    = train_config
         self.data      = np.zeros((self.sz, train_config["bsz"]), np.float32)
 
