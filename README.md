@@ -4,7 +4,10 @@
 
 ## Requirements
 * Python 2.7
-* Numpy, Flask (only for web-based demo) can be installed via pip:
+* Numpy, Flask (only for web-based demo) 
+* fastText
+
+can be installed via pip:
 ```
 $ sudo pip install -r requirements.txt
 ```
