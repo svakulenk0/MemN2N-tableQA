@@ -15,10 +15,10 @@ Test scripts for Python port of FastText
 
 import fasttext
 
-EMBEDDINGS_MODEL = 'fil9.bin'
-print "Loading", EMBEDDINGS_MODEL
-model = fasttext.load_model('./embeddings/'+EMBEDDINGS_MODEL)
-print "Finished loading"
+EMBEDDINGS_MODEL_PATH = '../fastText/result/fil9.bin'
+# print "Loading model from", EMBEDDINGS_MODEL_PATH
+model = fasttext.load_model(EMBEDDINGS_MODEL_PATH)
+# print "Finished loading"
 
 print len(model.words) # number of words in dictionary
 print model['king'] # get the vector of the word 'king'
