@@ -15,7 +15,7 @@ Test scripts for Python port of FastText
 
 import fasttext
 
-EMBEDDINGS_MODEL = 'enwik9'
+EMBEDDINGS_MODEL = 'fil9.bin'
 print "Loading", EMBEDDINGS_MODEL
 model = fasttext.load_model('./embeddings/'+EMBEDDINGS_MODEL)
 print "Finished loading"
