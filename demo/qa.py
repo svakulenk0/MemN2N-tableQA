@@ -16,7 +16,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 from config import BabiConfigJoint
 from train_test import train, train_linear_start
-from util import parse_babi_task, build_model
+from util import parse_babi_task, build_model, NWORDS, NSTORIES
 
 EMBEDDINGS_MODEL_PATH = '../fastText/result/fil9.bin'
 
@@ -97,6 +97,109 @@ class MemN2N(object):
         # Save model
         self.save_model()
 
+    def parse_babi_task(self, data_files, include_question):
+        """ Parse bAbI data. And expand the dictionary.
+
+        Args:
+           data_files (list): a list of data file's paths.
+           dictionary (dict): word's dictionary
+           include_question (bool): whether count question toward input sentence.
+
+        Returns:
+            A tuple of (story, questions, qstory):
+                story (3-D array)
+                    [position of word in sentence, sentence index, story index] = index of word in dictionary
+                questions (2-D array)
+                    [0-9, question index], in which the first component is encoded as follows:
+                        0 - story index
+                        1 - index of the last sentence before the question
+                        2 - index of the answer word in dictionary
+                        3 to 13 - indices of supporting sentence
+                        14 - line index
+                qstory (2-D array) question's indices within a story
+                    [index of word in question, question index] = index of word in dictionary
+        """
+        # Try to reserve spaces beforehand (large matrices for both 1k and 10k data sets)
+        story     = np.zeros((NWORDS, 500, len(data_files) * NSTORIES), np.int16)
+        questions = np.zeros((14, len(data_files) * 10000), np.int16)
+        qstory    = np.zeros((NWORDS, len(data_files) * 10000), np.int16)
+
+        # NOTE: question's indices are not reset when going through a new story
+        story_idx, question_idx, sentence_idx, max_words, max_sentences = -1, -1, -1, 0, 0
+
+        # Mapping line number (within a story) to sentence's index (to support the flag include_question)
+        mapping = None
+
+        for fp in data_files:
+            with open(fp) as f:
+                for line_idx, line in enumerate(f):
+                    line = line.rstrip().lower()
+                    words = line.split()
+
+                    # Story begins
+                    if words[0] == '1':
+                        story_idx += 1
+                        sentence_idx = -1
+                        mapping = []
+
+                    # FIXME: This condition makes the code more fragile!
+                    if '?' not in line:
+                        is_question = False
+                        sentence_idx += 1
+                    else:
+                        is_question = True
+                        question_idx += 1
+                        questions[0, question_idx] = story_idx
+                        questions[1, question_idx] = sentence_idx
+                        if include_question:
+                            sentence_idx += 1
+
+                    mapping.append(sentence_idx)
+
+                    # Skip substory index
+                    for k in range(1, len(words)):
+                        w = words[k]
+
+                        if w.endswith('.') or w.endswith('?'):
+                            w = w[:-1]
+                        if w not in self.general_config.dictionary:
+                            self.general_config.dictionary[w] = len(self.general_config.dictionary)
+
+                        if max_words < k:
+                            max_words = k
+                        # print sentence_idx, story_idx
+                        if not is_question:
+                            # look up word in a dictionary
+                            story[k - 1, sentence_idx, story_idx] = self.general_config.dictionary[w]
+                        else:
+                            qstory[k - 1, question_idx] = self.general_config.dictionary[w]
+                            if include_question:
+                                story[k - 1, sentence_idx, story_idx] = self.general_config.dictionary[w]
+
+                            # NOTE: Punctuation is already removed from w
+                            if words[k].endswith('?'):
+                                answer = words[k + 1]
+                                if answer not in self.general_config.dictionary:
+                                    self.general_config.dictionary[answer] = len(self.general_config.dictionary)
+
+                                questions[2, question_idx] = self.general_config.dictionary[answer]
+
+                                # Indices of supporting sentences
+                                for h in range(k + 2, len(words)):
+                                    questions[1 + h - k, question_idx] = mapping[int(words[h]) - 1]
+
+                                questions[-1, question_idx] = line_idx
+                                break
+
+                    if max_sentences < sentence_idx + 1:
+                        max_sentences = sentence_idx + 1
+
+        story     = story[:max_words, :max_sentences, :(story_idx + 1)]
+        questions = questions[:, :(question_idx + 1)]
+        qstory    = qstory[:max_words, :(question_idx + 1)]
+
+        return story, questions, qstory
+
     def get_story_texts(self, test_story, test_questions, test_qstory,
                         question_idx, story_idx, last_sentence_idx):
         """
@@ -106,17 +209,17 @@ class MemN2N(object):
         enable_time = self.general_config.enable_time
         max_words = train_config["max_words"] \
             if not enable_time else train_config["max_words"] - 1
-
+        print self.reversed_dict
         story = [[self.reversed_dict[test_story[word_pos, sent_idx, story_idx]]
                   for word_pos in range(max_words)]
-                 for sent_idx in range(last_sentence_idx + 1)]
+                  for sent_idx in range(last_sentence_idx + 1)]
 
         question = [self.reversed_dict[test_qstory[word_pos, question_idx]]
                     for word_pos in range(max_words)]
 
-        story_txt = [" ".join([w for w in sent if w != "nil"]) for sent in story]
-        question_txt = " ".join([w for w in question if w != "nil"])
-        correct_answer = self.reversed_dict[test_questions[2, question_idx]]
+        story_txt = [" ".join([w.decode('latin-1') for w in sent if w != "nil"]) for sent in story]
+        question_txt = " ".join([w.decode('latin-1') for w in question if w != "nil"])
+        correct_answer = self.reversed_dict[test_questions[2, question_idx]].decode('latin-1')
 
         return story_txt, question_txt, correct_answer
 
@@ -145,6 +248,8 @@ class MemN2N(object):
         encoded_user_question = None
         # new question different from test data
         if user_question_provided:
+            # TODO seq2seq translation/projection model
+            
             # print("User question = '%s'" % user_question)
             user_question = user_question.strip()
             if user_question[-1] == '?':
@@ -174,7 +279,7 @@ class MemN2N(object):
                         if cosine > max_cosine:
                             nn = word
                             max_cosine = cosine
-                    encoded_user_question[ix] = dictionary[word]
+                    encoded_user_question[ix] = dictionary[nn]
                     print w, 'recognized as', nn
 
         # Input data and data for the 1st memory cell
@@ -226,11 +331,22 @@ def run_console_demo(data_dir, model_file):
     memn2n.load_model()
 
     # Read test data
-    # print("Reading test data from %s ..." % memn2n.data_dir)
     # test_data_path = glob.glob('%s/qa*_*_test.txt' % memn2n.data_dir)
     test_data_path  = glob.glob(memn2n.data_path.format('test'))
+    # load different dataset with samples
+    # test_data_path  = glob.glob('./data/table_data_{}.txt'.format('test'))
+    print("Reading test data from %s ..." % test_data_path)
+
+    # print len(memn2n.general_config.dictionary)
+
+    
     test_story, test_questions, test_qstory = \
-        parse_babi_task(test_data_path, memn2n.general_config.dictionary, False)
+        memn2n.parse_babi_task(test_data_path, False)
+    
+    # SV expand reversed_dict with test data
+    # print len(memn2n.general_config.dictionary)
+    # Get reversed dictionary mapping index to word
+    memn2n.reversed_dict = dict((ix, w) for w, ix in memn2n.general_config.dictionary.items())
 
     while True:
         # Pick a random question
