@@ -18,7 +18,7 @@ seed_val = 42
 random.seed(seed_val)
 np.random.seed(seed_val)  # for reproducing
 
-EMBEDDINGS_MODEL_PATH = '../fastText/result/fil9.bin'
+# EMBEDDINGS_MODEL_PATH = '../fastText/result/fil9.bin'
 
 
 def run_tableQA(data_path, model_file):
@@ -54,7 +54,7 @@ def run_tableQA(data_path, model_file):
 
 
 if __name__ == "__main__":
-    dataset = 'test'
+    dataset = 'sim'
     # test - small subset of synthetic data 
     # original MemN2N performance ::: train error: 0 | val error: 0 Test error: 0.000000
     # synth - larger set with synthetic data
