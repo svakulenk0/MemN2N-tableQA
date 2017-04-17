@@ -12,15 +12,16 @@ div.shadow {
 }
 
 .qa-container, .qa-explain-container {
-    width: 550px;
+    width: 1260px;
+    /*width: 550px;*/
     /*max-height: 650px;*/
-    padding: 20px 50px 40px;
+    padding: 20px 10px 40px;
     margin-top: 10px;
-    margin-left: 30px;
+    margin-left: 0px;
 }
 
-.qa-explain-container table th {
-    font-size: 16px;
+.qa-container table th {
+    font-size: 10px;
     font-weight: bold;
 }
 
@@ -29,7 +30,7 @@ div.shadow {
 }
 
 .qa-form {
-    max-width: 600px;
+    max-width: 3600px;
     margin: 0 auto;
 }
 
@@ -37,7 +38,8 @@ div.shadow {
     width: 200px;
 }
 
-.qa-form .form-control[readonly] {
+.qa-form .form-control {
+    width: 550px;
     background-color: #fff;
 }
 
