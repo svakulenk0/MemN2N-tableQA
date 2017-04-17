@@ -1,5 +1,6 @@
 $(function() {
-    var $story        = $('#story'),
+    // var $story        = $('#story'),
+    var $table        = $('#table'),
         $question     = $('#question'),
         $answer       = $('#answer'),
         $getAnswer    = $('#get_answer'),
@@ -23,7 +24,55 @@ $(function() {
 
     function getStory() {
         $.get('/get/story', function(json) {
-            $story.val(json["story"]);
+            // $story.val(json["story"]);
+
+            // Populate input table
+            var tableHtml = [];
+            var currentRow = '';
+            var sentenceList = json["story"].split('\n');
+            // var maxLatestSents = memProbs.length;
+            var numSents = sentenceList.length;
+
+            // start writing the first row of the table
+            var rowHtml = [];
+            rowHtml.push('<tr>');
+
+            // iterate over rows
+            for (var i = 0; i < numSents; i++) {
+                console.log(sentenceList[i])
+
+                
+                var cellList = sentenceList[i].split(' ');
+                if (cellList[0] != currentRow){
+                    // switch to the new row
+                    rowHtml.push('</tr>');
+                    tableHtml.push(rowHtml.join('\n'));
+                    currentRow = cellList[0]
+                    rowHtml = [];
+                    rowHtml.push('<tr>');
+                }
+                // var row = cellList[0]
+                // for (var j = 0; j < cellList.length; j++) {
+                // if (cellList[0] == row) {
+                rowHtml.push('<td>' + cellList[2] + '</td>');
+                // }
+                // for (var j = 0; j < 3; j++) {
+                //     var val = memProbs[i][j].toFixed(2);
+                //     if (val > 0) {
+                //         rowHtml.push('<td style="color: black; ' +
+                //             'background-color: rgba(97, 152, 246, ' + val + ');">' + val + '</td>');
+                //     } else {
+                //         rowHtml.push('<td style="color: black;">' + val + '</td>');
+                //     }
+                // }
+                
+            }
+            // write the last row
+            rowHtml.push('</tr>');
+            tableHtml.push(rowHtml.join('\n'));
+
+            $table.find('tbody').html(tableHtml);
+
             $question.val(json["question"]);
             $question.data('question_idx', json["question_idx"]);
             $question.data('suggested_question', json["question"]); // Save suggested question
