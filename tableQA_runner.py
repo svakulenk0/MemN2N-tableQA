@@ -35,7 +35,7 @@ def run_tableQA(data_path, model_file):
     train_story, train_questions, train_qstory = parse_babi_task(train_files, dictionary, False)
     test_story, test_questions, test_qstory    = parse_babi_task(test_files, dictionary, False)
     # print test_questions
-    print dictionary
+    print len(dictionary)
     general_config = BabiConfig(train_story, train_questions, dictionary)
 
     memory, model, loss = build_model(general_config)
