@@ -351,7 +351,7 @@ class LookupTable(Module):
             out_dim (int): output dimension
         """
         super(LookupTable, self).__init__()
-        self.sz      = voc_sz
+        self.sz      = voc_sz*100
         self.out_dim = out_dim
         self.weight  = Weight((out_dim, voc_sz))
 
