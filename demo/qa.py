@@ -18,7 +18,8 @@ from config import BabiConfigJoint
 from train_test import train, train_linear_start
 from util import parse_babi_task, build_model, NWORDS, NSTORIES, NSENTENCES
 
-EMBEDDINGS_MODEL_PATH = '../fastText/result/fil9.bin'
+# EMBEDDINGS_MODEL_PATH = '../fastText/result/fil9.bin'
+EMBEDDINGS_MODEL_PATH = 'embeddings/fil9.bin'
 
 
 class MemN2N(object):
