@@ -46,6 +46,10 @@
                     </table>
 
                 </div>
+                <div class="form-group hidden">
+                    <!-- <h4><label for="story">Table</label></h4> -->
+                    <textarea class="form-control" id="story" rows="10" readonly></textarea>
+                </div>
                 <div class="form-group">
                     <h4>
                         <label for="question">Question</label>
@@ -54,10 +58,13 @@
                     </h4>
                     <input class="form-control" id="question" autofocus
                            autocomplete="off" spellcheck="false">
+                    <!-- <textarea class="form-control" rows="5" readonly id="dis_question"></textarea> -->
+                    <div id="dis_question"></div>
+
                 </div>
                 <div class="form-group">
                     <h4><label for="answer">Answer</label></h4>
-                    <textarea class="form-control" id="answer" rows="5" readonly></textarea>
+                    <textarea class="form-control" id="answer" rows="3" readonly></textarea>
                 </div>
                 <br>
                 <div class="text-center">
@@ -66,7 +73,7 @@
                 </div>
             </form>
         </div>
-        <!-- <div class="col-md-6 shadow qa-explain-container">
+        <div class="col-md-6 shadow qa-explain-container">
             <div class="form-group">
                 <table class="table table-hover" id="explanation">
                     <thead>
@@ -81,7 +88,7 @@
                     </tbody>
                 </table>
             </div>
-        </div> -->
+        </div>
     </div>
 </div>
 </body>

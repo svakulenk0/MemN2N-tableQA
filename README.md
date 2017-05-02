@@ -5,7 +5,7 @@
 ## Requirements
 * Python 2.7
 * Numpy, Flask (only for web-based demo) 
-* fastText
+* fastText (+cython)
 
 can be installed via pip:
 ```
@@ -102,6 +102,18 @@ Based on a real table (limiting vocabulary size and producing more training exam
 
 100 | train error: 0.0547153 | val error: 0.0917339
 Test error: 0.087500
+
+100 | train error: 0.0013587 | val error: 0.0798611            
+Test error: 0.100446
+
+///////////////////////////////////////////////////
+DOMAIN = 10
+NSAMPLES = 10,000
+vsize = 64
+
+training file lines: 251,535
+test file lines: 158,465
+
 
 3. Real data (table)
 

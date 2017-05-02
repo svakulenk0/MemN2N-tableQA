@@ -29,6 +29,10 @@ div.shadow {
     text-align: center;
 }
 
+.hidden {
+    display: none;
+}
+
 .qa-form {
     max-width: 3600px;
     margin: 0 auto;
