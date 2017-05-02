@@ -55,7 +55,7 @@ def index():
     return flask.render_template("index.html")
 
 
-@app.route('/tableqaget/story', methods=['GET'])
+@app.route('/get/story', methods=['GET'])
 def get_story():
     question_idx      = np.random.randint(test_questions.shape[1])
     story_idx         = test_questions[0, question_idx]
