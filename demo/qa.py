@@ -16,7 +16,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 from config import BabiConfigJoint
 from train_test import train, train_linear_start
-from util import parse_babi_task, build_model, NWORDS, NSTORIES
+from util import parse_babi_task, build_model, NWORDS, NSTORIES, NSENTENCES
 
 EMBEDDINGS_MODEL_PATH = '../fastText/result/fil9.bin'
 
@@ -120,7 +120,7 @@ class MemN2N(object):
                     [index of word in question, question index] = index of word in dictionary
         """
         # Try to reserve spaces beforehand (large matrices for both 1k and 10k data sets)
-        story     = np.zeros((NWORDS, 500, len(data_files) * NSTORIES), np.int16)
+        story     = np.zeros((NWORDS, NSENTENCES, len(data_files) * NSTORIES), np.int16)
         questions = np.zeros((14, len(data_files) * 10000), np.int16)
         qstory    = np.zeros((NWORDS, len(data_files) * 10000), np.int16)
 
@@ -135,7 +135,6 @@ class MemN2N(object):
                 for line_idx, line in enumerate(f):
                     line = line.rstrip().lower()
                     words = line.split()
-
                     # Story begins
                     if words[0] == '1':
                         story_idx += 1
@@ -194,10 +193,11 @@ class MemN2N(object):
                     if max_sentences < sentence_idx + 1:
                         max_sentences = sentence_idx + 1
 
+
         story     = story[:max_words, :max_sentences, :(story_idx + 1)]
         questions = questions[:, :(question_idx + 1)]
         qstory    = qstory[:max_words, :(question_idx + 1)]
-
+        print questions[1, 0]
         return story, questions, qstory
 
     def get_story_texts(self, test_story, test_questions, test_qstory,
@@ -209,11 +209,10 @@ class MemN2N(object):
         enable_time = self.general_config.enable_time
         max_words = train_config["max_words"] \
             if not enable_time else train_config["max_words"] - 1
-        print self.reversed_dict
         story = [[self.reversed_dict[test_story[word_pos, sent_idx, story_idx]]
                   for word_pos in range(max_words)]
                   for sent_idx in range(last_sentence_idx + 1)]
-
+        # print story
         question = [self.reversed_dict[test_qstory[word_pos, question_idx]]
                     for word_pos in range(max_words)]
 
@@ -246,6 +245,7 @@ class MemN2N(object):
                                                         question_idx, story_idx, last_sentence_idx)
         user_question_provided = user_question != '' and user_question != suggested_question
         encoded_user_question = None
+        dis_question = []
         # new question different from test data
         if user_question_provided:
             # TODO seq2seq translation/projection model
@@ -279,8 +279,13 @@ class MemN2N(object):
                         if cosine > max_cosine:
                             nn = word
                             max_cosine = cosine
-                    encoded_user_question[ix] = dictionary[nn]
-                    print w, 'recognized as', nn
+                    if max_cosine > 0.6:
+                        encoded_user_question[ix] = dictionary[nn]
+                        # print w + ' recognized as ' + nn
+                        dis_question.append(w.decode('latin-1') + ' recognized as ' + nn.decode('latin-1') + ' ' + "%.2f" % max_cosine)
+                        # dis_question.append(w + ' recognized as ' + nn)
+                    else:
+                        dis_question.append(w.decode('latin-1') + ' is not recognized and ignored')
 
         # Input data and data for the 1st memory cell
         # Here we duplicate input_data to fill the whole batch
@@ -313,7 +318,7 @@ class MemN2N(object):
         pred_answer_idx  = out[:, 0].argmax()
         pred_prob = out[pred_answer_idx, 0]
 
-        return pred_answer_idx, pred_prob, memory_probs
+        return pred_answer_idx, pred_prob, memory_probs, dis_question
 
 
 def train_model(data_dir, model_file):
@@ -413,9 +418,9 @@ if __name__ == "__main__":
                        help="run web-based demo (default: %(default)s)")
     args = parser.parse_args()
 
-    if not os.path.exists(args.data_dir):
-        print("The data directory '%s' does not exist. Please download it first." % args.data_dir)
-        sys.exit(1)
+    # if not os.path.exists(args.data_dir):
+    #     print("The data directory '%s' does not exist. Please download it first." % args.data_dir)
+    #     sys.exit(1)
 
     if args.train:
         train_model(args.data_dir, args.model_file)
