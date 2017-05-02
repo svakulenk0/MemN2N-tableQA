@@ -50,12 +50,12 @@ def run():
     app.run()
 
 
-@app.route('/tableqa')
+@app.route('/')
 def index():
     return flask.render_template("index.html")
 
 
-@app.route('/tableqa/get/story', methods=['GET'])
+@app.route('/get/story', methods=['GET'])
 def get_story():
     question_idx      = np.random.randint(test_questions.shape[1])
     story_idx         = test_questions[0, question_idx]
@@ -78,7 +78,7 @@ def get_story():
     })
 
 
-@app.route('/tableqa/get/answer', methods=['GET'])
+@app.route('/get/answer', methods=['GET'])
 def get_answer():
     question_idx  = int(flask.request.args.get('question_idx'))
     user_question = flask.request.args.get('user_question', '')
