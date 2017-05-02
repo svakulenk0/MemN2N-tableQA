@@ -50,7 +50,7 @@ def run():
     app.run()
 
 
-@app.route('/')
+@app.route('/tableqa')
 def index():
     return flask.render_template("index.html")
 
