@@ -95,7 +95,7 @@ $(function() {
             question          = $question.val();
 
         var userQuestion = suggestedQuestion !== question? question : '';
-        var url = '/get/answer?question_idx=' + questionIdx +
+        var url = '/tableqaget/answer?question_idx=' + questionIdx +
             '&user_question=' + encodeURIComponent(userQuestion);
 
         $.get(url, function(json) {
