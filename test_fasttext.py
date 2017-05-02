@@ -15,7 +15,8 @@ Test scripts for Python port of FastText
 
 import fasttext
 
-EMBEDDINGS_MODEL_PATH = '../fastText/result/fil9.bin'
+# EMBEDDINGS_MODEL_PATH = '../fastText/result/fil9.bin'
+EMBEDDINGS_MODEL_PATH = 'embeddings/fil9.bin'
 # print "Loading model from", EMBEDDINGS_MODEL_PATH
 model = fasttext.load_model(EMBEDDINGS_MODEL_PATH)
 # print "Finished loading"
