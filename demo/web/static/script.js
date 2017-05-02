@@ -24,7 +24,7 @@ $(function() {
     });
 
     function getStory() {
-        $.get('/tableqaget/story', function(json) {
+        $.get('/get/story', function(json) {
             $story.val(json["story"]);
 
             // erase disambiguated query info
@@ -95,7 +95,7 @@ $(function() {
             question          = $question.val();
 
         var userQuestion = suggestedQuestion !== question? question : '';
-        var url = '/tableqaget/answer?question_idx=' + questionIdx +
+        var url = '/get/answer?question_idx=' + questionIdx +
             '&user_question=' + encodeURIComponent(userQuestion);
 
         $.get(url, function(json) {
