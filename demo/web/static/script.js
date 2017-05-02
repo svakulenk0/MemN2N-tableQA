@@ -24,7 +24,7 @@ $(function() {
     });
 
     function getStory() {
-        $.get('/get/story', function(json) {
+        $.get('/tableqaget/story', function(json) {
             $story.val(json["story"]);
 
             // erase disambiguated query info
