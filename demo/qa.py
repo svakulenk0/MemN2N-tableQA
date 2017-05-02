@@ -121,6 +121,7 @@ class MemN2N(object):
                     [index of word in question, question index] = index of word in dictionary
         """
         # Try to reserve spaces beforehand (large matrices for both 1k and 10k data sets)
+        print NWORDS, NSENTENCES, len(data_files)
         story     = np.zeros((NWORDS, NSENTENCES, len(data_files) * NSTORIES), np.int16)
         questions = np.zeros((14, len(data_files) * 10000), np.int16)
         qstory    = np.zeros((NWORDS, len(data_files) * 10000), np.int16)
