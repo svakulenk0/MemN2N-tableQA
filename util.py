@@ -11,7 +11,7 @@ from memn2n.nn import Identity, ReLU, Sequential, LookupTable, Sum, Parallel, So
 
 NSTORIES = 10000  # original: 3500
 NWORDS = 50  # maximum number of words in sentence original: 20
-NSENTENCES = 70000  # original: 500
+NSENTENCES = 500  # 70000  # original: 500
 
 
 def _process_input(self, data_raw):
