@@ -144,62 +144,62 @@ $(function() {
             $explainTable.find('tbody').html(explanationHtml);
 
             // Populate input table
-            // var tableHtml = [];
-            // var currentRow = '';
-            // var sentenceList = json["story"].split('\n');
-            // // var maxLatestSents = memProbs.length;
+            var tableHtml = [];
+            var currentRow = '';
+            // var sentenceList = $story.val().split('\n');
+            // var maxLatestSents = memProbs.length;
             // var numSents = sentenceList.length;
-            // // start writing the first row of the table
-            // var rowHtml = [];
-            // rowHtml.push('<tr>');
+            // start writing the first row of the table
+            var rowHtml = [];
+            rowHtml.push('<tr>');
 
-            // // iterate over rows
-            // for (var i = 0; i < numSents; i++) {
-            //     // console.log(sentenceList[i])
+            // iterate over rows
+            for (var i = 0; i < numSents; i++) {
+                // console.log(sentenceList[i])
 
                 
-            //     var cellList = sentenceList[i].split(' ');
-            //     if (cellList[0] != currentRow){
-            //         // switch to the new row
-            //         rowHtml.push('</tr>');
-            //         tableHtml.push(rowHtml.join('\n'));
-            //         currentRow = cellList[0]
-            //         rowHtml = [];
-            //         rowHtml.push('<tr>');
-            //     }
-            //     // var row = cellList[0]
-            //     // for (var j = 0; j < cellList.length; j++) {
-            //     // if (cellList[0] == row) {
-            //     var val = memProbs[i][0].toFixed(2);
-            //     console.log(val)
-            //     // rowHtml.push('<td>' + cellList[2] + '</td>');
+                var cellList = sentenceList[i].split(' ');
+                if (cellList[0] != currentRow){
+                    // switch to the new row
+                    rowHtml.push('</tr>');
+                    tableHtml.push(rowHtml.join('\n'));
+                    currentRow = cellList[0]
+                    rowHtml = [];
+                    rowHtml.push('<tr>');
+                }
+                // var row = cellList[0]
+                // for (var j = 0; j < cellList.length; j++) {
+                // if (cellList[0] == row) {
+                var val = memProbs[i][0].toFixed(2);
+                console.log(val)
+                // rowHtml.push('<td>' + cellList[2] + '</td>');
 
-            //     // for (var j = 0; j < 3; j++) {
-            //     if (val > 0) {
-            //         rowHtml.push('<td style="color: black; ' +
-            //             'background-color: rgba(97, 152, 246, ' + val + ');">' + cellList[2] + '</td>');
-            //     } else {
-            //         rowHtml.push('<td style="color: black;">' + cellList[2] + '</td>');
-            //     }
-            //     // }
+                // for (var j = 0; j < 3; j++) {
+                if (val > 0) {
+                    rowHtml.push('<td style="color: black; ' +
+                        'background-color: rgba(97, 152, 246, ' + val + ');">' + cellList[2] + '</td>');
+                } else {
+                    rowHtml.push('<td style="color: black;">' + cellList[2] + '</td>');
+                }
+                // }
 
-            //     // }
-            //     // for (var j = 0; j < 3; j++) {
-            //     //     var val = memProbs[i][j].toFixed(2);
-            //     //     if (val > 0) {
-            //     //         rowHtml.push('<td style="color: black; ' +
-            //     //             'background-color: rgba(97, 152, 246, ' + val + ');">' + val + '</td>');
-            //     //     } else {
-            //     //         rowHtml.push('<td style="color: black;">' + val + '</td>');
-            //     //     }
-            //     // }
+                // }
+                // for (var j = 0; j < 3; j++) {
+                //     var val = memProbs[i][j].toFixed(2);
+                //     if (val > 0) {
+                //         rowHtml.push('<td style="color: black; ' +
+                //             'background-color: rgba(97, 152, 246, ' + val + ');">' + val + '</td>');
+                //     } else {
+                //         rowHtml.push('<td style="color: black;">' + val + '</td>');
+                //     }
+                // }
                 
-            // }
-            // // write the last row
-            // rowHtml.push('</tr>');
-            // tableHtml.push(rowHtml.join('\n'));
+            }
+            // write the last row
+            rowHtml.push('</tr>');
+            tableHtml.push(rowHtml.join('\n'));
 
-            // $table.find('tbody').html(tableHtml);
+            $table.find('tbody').html(tableHtml);
         });
     }
 });
