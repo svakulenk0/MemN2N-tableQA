@@ -104,20 +104,20 @@ $(function() {
                 predProb = json["pred_prob"],
                 memProbs = json["memory_probs"];
             console.log(dis_question)
-            // $dis_question.val(dis_question);
             $dis_question.html(dis_question);
 
-            var outputMessage = "Answer = '" + predAnswer + "'" +
-                "\nConfidence score = " + (predProb * 100).toFixed(2) + "%";
+            var outputMessage = "<b>" + predAnswer + "</b>" +
+                "<br>Confidence " + (predProb * 100).toFixed(2) + "%";
 
             // Show answer's feedback only if suggested question was used
             if (userQuestion === '') {
                 if (predAnswer === correctAnswer)
-                    outputMessage += "\nCorrect!";
+                    outputMessage += "<br>Correct!";
                 else
-                    outputMessage += "\nWrong. The correct answer is '" + correctAnswer + "'";
+                    outputMessage += "<br>Wrong. The correct answer is '" + correctAnswer + "'";
             }
-            $answer.val(outputMessage);
+            // $answer.val(outputMessage);
+            $answer.html(outputMessage);
 
             // Explain answer
             var explanationHtml = [];
