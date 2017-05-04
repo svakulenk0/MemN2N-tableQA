@@ -1,13 +1,12 @@
 body {
     padding-top: 10px;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Lobster', sans-serif;
 }
 
 div.shadow {
     border: 1px solid #ccc;
     border-radius: 10px;
     box-shadow: 0 0 24px #bbb;
-    background: #fff;
     color: #666;
 }
 
@@ -44,12 +43,11 @@ div.shadow {
 
 .qa-form .form-control {
     width: 550px;
-    background-color: #fff;
 }
 
 /* Font */
 .app-header, .qa-form label, .qa-explain-container label, .qa-explain-container th {
-    font-family: 'Shadows Into Light Two', sans-serif;
+    font-family: 'Lobster';
 }
 /*.qa-form input, .qa-form textarea, .qa-form button {*/
     /*font-family: 'Roboto', sans-serif;*/
