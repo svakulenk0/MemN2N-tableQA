@@ -156,8 +156,6 @@ $(function() {
             // iterate over rows
             for (var i = 0; i < numSents; i++) {
                 // console.log(sentenceList[i])
-
-                
                 var cellList = sentenceList[i].split(' ');
                 if (cellList[0] != currentRow){
                     // switch to the new row
@@ -167,33 +165,22 @@ $(function() {
                     rowHtml = [];
                     rowHtml.push('<tr>');
                 }
-                // var row = cellList[0]
-                // for (var j = 0; j < cellList.length; j++) {
-                // if (cellList[0] == row) {
-                var val = memProbs[i][0].toFixed(2);
+                // 1st memory cell attention
+                // var val = memProbs[i][0].toFixed(2);
+                // sum over all memory cells
+                var val = 0;
+                for (var j = 0; j < 3; j++) {
+                    val += memProbs[i][j];
+                }
                 console.log(val)
-                // rowHtml.push('<td>' + cellList[2] + '</td>');
-
-                // for (var j = 0; j < 3; j++) {
+                // number to string
+                val = val.toFixed(2);
                 if (val > 0) {
                     rowHtml.push('<td style="color: black; ' +
                         'background-color: rgba(97, 152, 246, ' + val + ');">' + cellList[2] + '</td>');
                 } else {
                     rowHtml.push('<td style="color: black;">' + cellList[2] + '</td>');
                 }
-                // }
-
-                // }
-                // for (var j = 0; j < 3; j++) {
-                //     var val = memProbs[i][j].toFixed(2);
-                //     if (val > 0) {
-                //         rowHtml.push('<td style="color: black; ' +
-                //             'background-color: rgba(97, 152, 246, ' + val + ');">' + val + '</td>');
-                //     } else {
-                //         rowHtml.push('<td style="color: black;">' + val + '</td>');
-                //     }
-                // }
-                
             }
             // write the last row
             rowHtml.push('</tr>');
