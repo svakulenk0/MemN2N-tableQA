@@ -12,9 +12,11 @@ can be installed via pip:
 $ sudo pip install -r requirements.txt
 ```
 
-## Usage
+## Pre-requisite
 
-* Provide the correct path to the pre-trained fastText model (clone fastText Github repository and run ./word-vector-example.sh to train a model on the English Wikipedia)
+1. Provide the correct path to the pre-trained fastText model (clone fastText Github repository and run ./word-vector-example.sh to train a model on the English Wikipedia) 
+download pre-trained model
+('make clean' and 'unzip enwik9.zip' before)
 
 * To train and evaluate the model use `tableQA_runner.py`
 
@@ -175,9 +177,9 @@ Test error: 0.189338
 ### Acknowledgment
 
 * Based on [Vinh Khuc: MemN2N for babi tasks](https://github.com/vinhkhuc/MemN2N-babi-python).
-* [YerevaNN: Dynamic-memory-networks-in-Theano](https://github.com/YerevaNN/Dynamic-memory-networks-in-Theano)
-
-### References
 * Sainbayar Sukhbaatar, Arthur Szlam, Jason Weston, Rob Fergus, 
   [End-To-End Memory Networks](http://arxiv.org/abs/1503.08895)
+
+### Related Work
+* [YerevaNN: Dynamic-memory-networks-in-Theano](https://github.com/YerevaNN/Dynamic-memory-networks-in-Theano)
 * Kumar et al. [Dynamic memory networks](http://arxiv.org/abs/1506.07285)
