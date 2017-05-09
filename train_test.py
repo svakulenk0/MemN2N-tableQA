@@ -13,7 +13,6 @@ def train(train_story, train_questions, train_qstory, memory, model, loss, gener
     dictionary       = general_config.dictionary
     nepochs          = general_config.nepochs
     nhops            = general_config.nhops
-    batch_size       = general_config.batch_size
     enable_time      = general_config.enable_time
     randomize_time   = general_config.randomize_time
     lrate_decay_step = general_config.lrate_decay_step
@@ -23,10 +22,13 @@ def train(train_story, train_questions, train_qstory, memory, model, loss, gener
     train_len      = len(train_range)
     val_len        = len(val_range)
 
+    batch_size       = min(general_config.batch_size, train_len)
+
     params = {
         "lrate": train_config["init_lrate"],
         "max_grad_norm": train_config["max_grad_norm"]
     }
+    print "Number of training examples", train_len
 
     for ep in range(nepochs):
         # Decrease learning rate after every decay step
@@ -36,6 +38,8 @@ def train(train_story, train_questions, train_qstory, memory, model, loss, gener
         total_err  = 0.
         total_cost = 0.
         total_num  = 0
+        # print "Batch size:", batch_size
+        # print int(math.floor(train_len / batch_size))
         for _ in Progress(range(int(math.floor(train_len / batch_size)))):
             # Question batch
             batch = train_range[np.random.randint(train_len, size=batch_size)]
@@ -129,6 +133,9 @@ def train(train_story, train_questions, train_qstory, memory, model, loss, gener
         val_error   = total_val_err / total_val_num
 
         print("%d | train error: %g | val error: %g" % (ep + 1, train_error, val_error))
+        # early stopping
+        if train_error == val_error == 0:
+            return
 
 
 def train_linear_start(train_story, train_questions, train_qstory, memory, model, loss, general_config):
@@ -177,7 +184,8 @@ def test(test_story, test_questions, test_qstory, memory, model, loss, general_c
 
     max_words = train_config["max_words"] \
         if not enable_time else train_config["max_words"] - 1
-
+    n_tests = test_questions.shape[1]
+    print "Number of testing examples", n_tests
     for k in range(int(math.floor(test_questions.shape[1] / batch_size))):
         batch = np.arange(k * batch_size, (k + 1) * batch_size)
 
