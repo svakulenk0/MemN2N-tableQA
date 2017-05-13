@@ -9,7 +9,7 @@ from memn2n.memory import MemoryL, MemoryBoW
 from memn2n.nn import AddTable, CrossEntropyLoss, Duplicate, ElemMult, LinearNB
 from memn2n.nn import Identity, ReLU, Sequential, LookupTable, Sum, Parallel, Softmax
 
-NSTORIES = 23000  # original: 3500
+NSTORIES = 15000  # original: 3500
 NWORDS = 50  # maximum number of words in sentence original: 20
 NSENTENCES = 500  # 70000  # original: 500
 
