@@ -19,7 +19,7 @@ class BabiConfig(object):
         self.train_range    = np.array(range(nb_train_questions))
         self.val_range      = np.array(range(nb_train_questions, nb_questions))
         self.enable_time    = False   # add time embeddings
-        self.use_bow        = False  # use Bag-of-Words instead of Position-Encoding
+        self.use_bow        = True  # use Bag-of-Words instead of Position-Encoding
         self.linear_start   = True
         self.share_type     = 1      # 1: adjacent, 2: layer-wise weight tying
         self.randomize_time = 0.1    # amount of noise injected into time index
