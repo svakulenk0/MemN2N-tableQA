@@ -21,7 +21,6 @@ download pre-trained model
 * To train and evaluate the model use `tableQA_runner.py`
 
 
-
 ## Question Answering Demo
 * In order to run the Web-based demo using the pretrained model in `trained_model/`, run:
 ```
@@ -165,13 +164,113 @@ Sample CSV table transformed into babi-format.
 40 Row4 EMIGRATION_TOTAL 55
 41 What is the INTERNATIONAL_MIG_IMMIGRATION for Steinhaus?	10	33 36
 
+
+** train 574 lines template2 77818
+test 451 lines
+
+
+** 21 epochs 2 hopes year
+
+** with linear start, time, position
+
+1) What is the INTERNAL_MIG_IMMIGRATION for Traun?	10	33 35
+Dictionary: 64
+Number of training examples 5901
+6 | train error: 0 | val error: 0
+Number of testing examples 3443
+Test error: 0.000000
+
+2) What is the EMIGRATION_TOTAL for Allhaming in 2006?	6	33 34 40
+overlap year
+
+50 epochs
+
+Dictionary: 65
+
+Number of training examples 5926
+50 | train error: 0.193581 | val error: 0.270313                
+Number of testing examples 3415
+Test error: 0.271521
+
+Number of training examples 6107
+50 | train error: 0.177303 | val error: 0.25744                 
+Number of testing examples 3214
+Test error: 0.265625
+
+Number of training examples 8593
+50 | train error: 0.0115438 | val error: 0.0237069              
+Number of testing examples 452
+Test error: 0.020089
+
+TO continue 100 epochs
+
+5) What is the EMIGRATION_TOTAL for Allhaming in 2006?	6	33 34 40
+overlap city/year shuffled
+
+Dictionary: 65
+Number of training examples 9947
+50 | train error: 0.203528 | val error: 0.265625                
+Number of testing examples 452
+Test error: 0.258929
+
+Dictionary: 65
+Number of training examples 18087
+47 | train error: 0 | val error: 0                              
+Number of testing examples 4903
+Test error: 0.000408
+
+6) INTERNATIONAL_MIG_IMMIGRATION Burgkirchen 2003?	9	13 14 16
+overlap city/year shuffled + question template stripped
+
+Dictionary: 60
+Number of training examples 7983
+
+---
+
+7) INTERNATIONAL_MIG_IMMIGRATION Traun?	5	3 6
+single key + question template stripped + bow
+
+Dictionary: 60
+Number of training examples 5870
+15 | train error: 0 | val error: 0
+Number of testing examples 3477
+Test error: 0.000000
+
+
+
+1. What is the EMIGRATION_TOTAL for Helfenberg?	2	13 20
+IMMIGRATION_TOTAL in Burgkirchen?	4	3 7
+(simple key + 2 question templates + bow)
+
+Dictionary: 65
+Number of training examples 5949
+9 | train error: 0 | val error: 0                              
+Number of testing examples 3389
+Test error: 0.000298
+
+
+2. What is the INTERNAL_MIG_IMMIGRATION for Grieskirchen in 2004?	4	13 14 15
+IMMIGRATION_TOTAL in Burgkirchen for 2002?	10240	23 24 27
+(complex key + 2 question templates + bow)
+
+Dictionary: 65
+Number of training examples 18953
+68 | train error: 0 | val error: 0                              
+Number of testing examples 3941
+Test error: 0.000762
+
+1+ unrestricted domain + simple key
+Dictionary: 2101
+Number of training examples 12618
+
+
 * Results
 
 Row-based formatting does not work error ~ 1
 
 Cell-based formatting:
 
-100 | train error: 0.148849 | val error: 0.535156               
+100 | train error: 0.148849 | val error: 0.535156
 Test error: 0.189338
 
 ### Acknowledgment
