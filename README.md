@@ -1,6 +1,14 @@
 ## End-To-End Memory Networks for Question Answering on Tables
 
 
+## Demo
+
+* The demo is deployed at [https://svakulenko.ai.wu.ac.at/tableqa](https://svakulenko.ai.wu.ac.at/tableqa)
+
+* Command to run it locally:
+```
+python -m demo.qa
+```
 
 ## Requirements
 * Python 2.7
@@ -19,25 +27,6 @@ download pre-trained model
 ('make clean' and 'unzip enwik9.zip' before)
 
 * To train and evaluate the model use `tableQA_runner.py`
-
-
-## Question Answering Demo
-* In order to run the Web-based demo using the pretrained model in `trained_model/`, run:
-```
-python -m demo.qa
-```
-
-* Alternatively, you can try the console-based demo:
-```
-python -m demo.qa -console
-```
-
-* The pretrained model can be created by running:
-```
-python -m demo.qa -train
-```
-
-* To show all options, run `python -m demo.qa -h`
 
 
 ## Experiments
@@ -107,12 +96,12 @@ Number of testing examples 3941
 Test error: 0.000762
 
 
-## Acknowledgment
+## Acknowledgments
 
 * Based on [Vinh Khuc: MemN2N for babi tasks](https://github.com/vinhkhuc/MemN2N-babi-python).
 * Sainbayar Sukhbaatar, Arthur Szlam, Jason Weston, Rob Fergus, 
   [End-To-End Memory Networks](http://arxiv.org/abs/1503.08895)
 
-### Related Work
+## Related Work
 * [YerevaNN: Dynamic-memory-networks-in-Theano](https://github.com/YerevaNN/Dynamic-memory-networks-in-Theano)
 * Kumar et al. [Dynamic memory networks](http://arxiv.org/abs/1506.07285)
