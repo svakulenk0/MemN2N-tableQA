@@ -79,8 +79,6 @@ IMMIGRATION_TOTAL in Burgkirchen?	4	3 7
 
 Number of training examples 5949
 9 | train error: 0 | val error: 0                              
-Number of testing examples 3389
-Test error: 0.000298
 
 
 2. Complex key
@@ -92,8 +90,6 @@ IMMIGRATION_TOTAL in Burgkirchen for 2002?	10240	23 24 27
 
 Number of training examples 18953
 68 | train error: 0 | val error: 0                              
-Number of testing examples 3941
-Test error: 0.000762
 
 
 ## Acknowledgments
