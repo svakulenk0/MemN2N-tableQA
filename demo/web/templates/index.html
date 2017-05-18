@@ -6,22 +6,26 @@
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://svakulenko.ai.wu.ac.at/tableqastatic/style.css" rel="stylesheet">
-    <!-- <link href="../static/style.css" rel="stylesheet"> -->
+    <!-- <link href="https://svakulenko.ai.wu.ac.at/tableqastatic/style.css" rel="stylesheet"> -->
+    <link href="../static/style.css" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light+Two" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
 
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="https://svakulenko.ai.wu.ac.at/tableqastatic/script.js"></script>
-    <!-- <script src="../static/script.js"></script> -->
+    <!-- <script src="https://svakulenko.ai.wu.ac.at/tableqastatic/script.js"></script> -->
+    <script src="../static/script.js"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
 </head>
 
 <body>
 <h2 class="text-center app-header">End-To-End Memory Network for Table QA</h2>
 <br>
 <div class="container">
+
+<a class="github-button" href="https://github.com/vendi12/MemN2N-tableQA" data-size="large" aria-label="Get source on GitHub">Source</a>
+
     <div class="row">
         <div class="col-md-6 shadow qa-container">
             <form class="qa-form">
@@ -71,8 +75,8 @@
                 </div>
                 <br>
                 <div class="text-center">
-                    <button class="btn btn-primary" id="get_answer" type="submit">Predict answer</button>
-                    <button class="btn btn-warning" id="get_story" type="submit">Get new table</button>
+                    <button type="button" class="btn btn-primary active" id="get_answer" type="submit">Predict answer</button>
+                    <button type="button" class="btn btn-primary disabled" id="get_story" type="submit">Get new table</button>
                 </div>
             </form>
         </div>
