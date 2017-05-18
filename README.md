@@ -1,4 +1,4 @@
-## End-To-End Memory Networks for Question Answering on Tables
+### End-To-End Memory Networks for Question Answering on Tables
 
 
 
@@ -43,7 +43,7 @@ python -m demo.qa -train
 ## Experiments
 
 
-* Data
+### Data
 
 Synthetic data based on a real table (limiting vocabulary size and producing more training examples)
 
@@ -69,16 +69,16 @@ Dictionary: 65
 
 9 What is the INTERNAL_MIG_IMMIGRATION for Geretsberg?	3	5 7
 
-* Settings
+### Settings
 
-linear start
+* linear start
 
-2 question templates
+* 2 question templates
 
-BOW
+* BOW
 
 
-* Results
+### Results
 
 
 1. Simple key 
@@ -107,7 +107,7 @@ Number of testing examples 3941
 Test error: 0.000762
 
 
-### Acknowledgment
+## Acknowledgment
 
 * Based on [Vinh Khuc: MemN2N for babi tasks](https://github.com/vinhkhuc/MemN2N-babi-python).
 * Sainbayar Sukhbaatar, Arthur Szlam, Jason Weston, Rob Fergus, 
