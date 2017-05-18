@@ -56,21 +56,8 @@ $(function() {
                     rowHtml = [];
                     rowHtml.push('<tr>');
                 }
-                // var row = cellList[0]
-                // for (var j = 0; j < cellList.length; j++) {
-                // if (cellList[0] == row) {
                 rowHtml.push('<td>' + cellList[2] + '</td>');
-                // }
-                // for (var j = 0; j < 3; j++) {
-                //     var val = memProbs[i][j].toFixed(2);
-                //     if (val > 0) {
-                //         rowHtml.push('<td style="color: black; ' +
-                //             'background-color: rgba(97, 152, 246, ' + val + ');">' + val + '</td>');
-                //     } else {
-                //         rowHtml.push('<td style="color: black;">' + val + '</td>');
-                //     }
-                // }
-                
+                // rowHtml.push('<td><input class="tdinput" type="text" value="' + cellList[2] + '" /></td>');
             }
             // write the last row
             rowHtml.push('</tr>');

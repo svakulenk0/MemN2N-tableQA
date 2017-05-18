@@ -15,11 +15,12 @@ import fasttext
 from sklearn.metrics.pairwise import cosine_similarity
 
 from config import BabiConfigJoint
-from train_test import train, train_linear_start
+from train_test import train, train_linear_start, test
 from util import parse_babi_task, build_model, NWORDS, NSTORIES, NSENTENCES
 
 # EMBEDDINGS_MODEL_PATH = '../fastText/result/fil9.bin'
 EMBEDDINGS_MODEL_PATH = 'embeddings/fil9.bin'
+SIM_FASTTEXT_THRESHOLD = 0.8
 
 
 class MemN2N(object):
@@ -121,7 +122,7 @@ class MemN2N(object):
                     [index of word in question, question index] = index of word in dictionary
         """
         # Try to reserve spaces beforehand (large matrices for both 1k and 10k data sets)
-        print NWORDS, NSENTENCES, len(data_files)
+        # print NWORDS, NSENTENCES, len(data_files)
         story     = np.zeros((NWORDS, NSENTENCES, len(data_files) * NSTORIES), np.int16)
         questions = np.zeros((14, len(data_files) * 10000), np.int16)
         qstory    = np.zeros((NWORDS, len(data_files) * 10000), np.int16)
@@ -261,9 +262,12 @@ class MemN2N(object):
             # Encoding
             encoded_user_question = np.zeros(max_words)
             encoded_user_question[:] = dictionary["nil"]
+            qindex = 0
             for ix, w in enumerate(qwords):
                 if w in dictionary:
-                    encoded_user_question[ix] = dictionary[w]
+                    print w
+                    encoded_user_question[qindex] = dictionary[w]
+                    qindex += 1
                 else:
                     print("WARNING - The word '%s' is not in dictionary." % w)
                     # SV deal with OOV words!
@@ -281,8 +285,9 @@ class MemN2N(object):
                         if cosine > max_cosine:
                             nn = word
                             max_cosine = cosine
-                    if max_cosine > 0.6:
-                        encoded_user_question[ix] = dictionary[nn]
+                    if max_cosine > SIM_FASTTEXT_THRESHOLD:
+                        encoded_user_question[qindex] = dictionary[nn]
+                        qindex += 1
                         # print w + ' recognized as ' + nn
                         dis_question.append(w.decode('latin-1') + ' recognized as ' + nn.decode('latin-1') + ' ' + "%.2f" % max_cosine)
                         # dis_question.append(w + ' recognized as ' + nn)
@@ -336,10 +341,13 @@ def run_console_demo(data_dir, model_file):
 
     # Try to load model
     memn2n.load_model()
+    train_dict_n = len(memn2n.general_config.dictionary)
+    print 'Dictionary size', len(memn2n.general_config.dictionary)
+
 
     # Read test data
-    # test_data_path = glob.glob('%s/qa*_*_test.txt' % memn2n.data_dir)
-    test_data_path  = glob.glob(memn2n.data_path.format('test'))
+    test_data_path = glob.glob('./data/sim_data_test.txt')
+    # test_data_path  = glob.glob(memn2n.data_path.format('test'))
     # load different dataset with samples
     # test_data_path  = glob.glob('./data/table_data_{}.txt'.format('test'))
     print("Reading test data from %s ..." % test_data_path)
@@ -351,52 +359,57 @@ def run_console_demo(data_dir, model_file):
         memn2n.parse_babi_task(test_data_path, False)
     
     # SV expand reversed_dict with test data
-    # print len(memn2n.general_config.dictionary)
+    print 'Dictionary size', len(memn2n.general_config.dictionary)
+    oov_n = len(memn2n.general_config.dictionary) - train_dict_n
     # Get reversed dictionary mapping index to word
     memn2n.reversed_dict = dict((ix, w) for w, ix in memn2n.general_config.dictionary.items())
+    # print memn2n.memory.emb_out
+    # memn2n.memory.emb_out
+    # memn2n.test(test_story, test_questions, test_qstory)
+    test(test_story, test_questions, test_qstory, memn2n.memory, memn2n.model, memn2n.loss, memn2n.general_config)
 
-    while True:
-        # Pick a random question
-        question_idx      = np.random.randint(test_questions.shape[1])
-        story_idx         = test_questions[0, question_idx]
-        last_sentence_idx = test_questions[1, question_idx]
+        # while True:
+        #     # Pick a random question
+        #     question_idx      = np.random.randint(test_questions.shape[1])
+        #     story_idx         = test_questions[0, question_idx]
+        #     last_sentence_idx = test_questions[1, question_idx]
 
-        # Get story and question
-        story_txt, question_txt, correct_answer = memn2n.get_story_texts(test_story, test_questions, test_qstory,
-                                                                         question_idx, story_idx, last_sentence_idx)
-        print("* Story:")
-        print("\n\t".join(story_txt))
-        print("\n* Suggested question:\n\t%s?" % question_txt)
+        #     # Get story and question
+        #     story_txt, question_txt, correct_answer = memn2n.get_story_texts(test_story, test_questions, test_qstory,
+        #                                                                      question_idx, story_idx, last_sentence_idx)
+        #     print("* Story:")
+        #     print("\n\t".join(story_txt))
+        #     print("\n* Suggested question:\n\t%s?" % question_txt)
 
-        while True:
-            user_question = raw_input("Your question (press Enter to use the suggested question):\n\t")
+        #     while True:
+        #         user_question = raw_input("Your question (press Enter to use the suggested question):\n\t")
 
-            pred_answer_idx, pred_prob, memory_probs = \
-                memn2n.predict_answer(test_story, test_questions, test_qstory,
-                                      question_idx, story_idx, last_sentence_idx,
-                                      user_question)
+        #         pred_answer_idx, pred_prob, memory_probs = \
+        #             memn2n.predict_answer(test_story, test_questions, test_qstory,
+        #                                   question_idx, story_idx, last_sentence_idx,
+        #                                   user_question)
 
-            pred_answer = memn2n.reversed_dict[pred_answer_idx]
+        #         pred_answer = memn2n.reversed_dict[pred_answer_idx]
 
-            print("* Answer: '%s', confidence score = %.2f%%" % (pred_answer, 100. * pred_prob))
-            if user_question == '':
-                if pred_answer == correct_answer:
-                    print("  Correct!")
-                else:
-                    print("  Wrong. The correct answer is '%s'" % correct_answer)
+        #         print("* Answer: '%s', confidence score = %.2f%%" % (pred_answer, 100. * pred_prob))
+        #         if user_question == '':
+        #             if pred_answer == correct_answer:
+        #                 print("  Correct!")
+        #             else:
+        #                 print("  Wrong. The correct answer is '%s'" % correct_answer)
 
-            print("\n* Explanation:")
-            print("\t".join(["Memory %d" % (i + 1) for i in range(len(memory_probs))]) + "\tText")
-            for sent_idx, sent_txt in enumerate(story_txt):
-                prob_output = "\t".join(["%.3f" % mem_prob for mem_prob in memory_probs[:, sent_idx]])
-                print("%s\t%s" % (prob_output, sent_txt))
+        #         print("\n* Explanation:")
+        #         print("\t".join(["Memory %d" % (i + 1) for i in range(len(memory_probs))]) + "\tText")
+        #         for sent_idx, sent_txt in enumerate(story_txt):
+        #             prob_output = "\t".join(["%.3f" % mem_prob for mem_prob in memory_probs[:, sent_idx]])
+        #             print("%s\t%s" % (prob_output, sent_txt))
 
-            asking_another_question = raw_input("\nDo you want to ask another question? [y/N] ")
-            if asking_another_question == '' or asking_another_question.lower() == 'n': break
+        #         asking_another_question = raw_input("\nDo you want to ask another question? [y/N] ")
+        #         if asking_another_question == '' or asking_another_question.lower() == 'n': break
 
-        will_continue = raw_input("Do you want to continue? [Y/n] ")
-        if will_continue != '' and will_continue.lower() != 'y': break
-        print("=" * 70)
+        #     will_continue = raw_input("Do you want to continue? [Y/n] ")
+        #     if will_continue != '' and will_continue.lower() != 'y': break
+        #     print("=" * 70)
 
 
 def run_web_demo(data_dir, model_file):

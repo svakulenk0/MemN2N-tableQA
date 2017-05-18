@@ -96,7 +96,7 @@ def get_answer():
     pred_answer = memn2n.reversed_dict[pred_answer_idx]
     print dis_question
     return flask.jsonify({
-        # disumbiguated question
+        # disambiguated question
         "dis_question" : "<br>".join(dis_question),
         "pred_answer" : pred_answer,
         "pred_prob" : pred_prob,
