@@ -54,7 +54,9 @@ def run():
 def index():
     return flask.render_template("index.html")
 
-
+# localhost
+# @app.route('/tableqaget/story', methods=['GET'])
+# server-side
 @app.route('/get/story', methods=['GET'])
 def get_story():
     question_idx      = np.random.randint(test_questions.shape[1])
@@ -77,7 +79,9 @@ def get_story():
         "correct_answer": correct_answer
     })
 
-
+# localhost
+# @app.route('/tableqaget/answer', methods=['GET'])
+# server-side
 @app.route('/get/answer', methods=['GET'])
 def get_answer():
     question_idx  = int(flask.request.args.get('question_idx'))

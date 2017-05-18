@@ -32,6 +32,11 @@ div.shadow {
     display: none;
 }
 
+input.tdinput
+{
+    width: 100%;
+}
+
 .qa-form {
     max-width: 3600px;
     margin: 0 auto;
@@ -42,7 +47,7 @@ div.shadow {
 }
 
 .qa-form .form-control {
-    width: 550px;
+    width: 650px;
 }
 
 /* Font */
