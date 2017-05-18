@@ -42,40 +42,14 @@ python -m demo.qa -train
 
 ## Experiments
 
-1. Synthetic patterns (synth)
 
 * Data
 
-Cell-based babi-like data format.
+Synthetic data based on a real table (limiting vocabulary size and producing more training examples)
 
-1 Row1 City Klagenfurt
-2 Row1 Immigration 19
-3 Row1 Emmigration 10
-4 Row2 City Feldkirch
-5 Row2 Immigration 12
-6 Row2 Emmigration 14
-7 What is the Emmigration in Klagenfurt?	10	1 3
+Cell-based formatting
 
-Vocab size: 29 unique words
-Story max length: 18 words
-Query max length: 7 words
-Number of training samples: 10000
-Number of test samples: 500
-
-* Results
-
-100 | train error: 0 | val error: 0
-Test error: 0.000000
-Finished in 21185.1s (MacAir)
-
-also on smaller dataset!
-Finished in 57.6s (MacAir)
-
-2. Simulated data (sim)
-
-Based on a real table (limiting vocabulary size and producing more training examples)
-
-* Data
+Dictionary: 65
 
 1 Row1 NUTS2 AT31
 2 Row1 LAU2_CODE 41004
@@ -99,179 +73,40 @@ Based on a real table (limiting vocabulary size and producing more training exam
 20 Row2 EMIGRATION_TOTAL 6
 21 What is the INTERNAL_MIG_IMMIGRATION for Geretsberg?	2	13 15
 
+* Settings
+
+linear start
+
+2 question templates
+
+BOW
+
+
 * Results
 
-100 | train error: 0.0547153 | val error: 0.0917339
-Test error: 0.087500
 
-100 | train error: 0.0013587 | val error: 0.0798611            
-Test error: 0.100446
+1. Simple key 
 
-///////////////////////////////////////////////////
-DOMAIN = 10
-NSAMPLES = 10,000
-vsize = 64
-
-training file lines: 251,535
-test file lines: 158,465
-
-
-3. Real data (table)
-
-Sample CSV table transformed into babi-format.
-
-* Data
-
-1 Row1 NUTS2 AT31
-2 Row1 LAU2_CODE 41819
-3 Row1 LAU2_NAME Sipbachzell
-4 Row1 YEAR 2002
-5 Row1 INTERNAL_MIG_IMMIGRATION 57
-6 Row1 INTERNATIONAL_MIG_IMMIGRATION 14
-7 Row1 IMMIGRATION_TOTAL 71
-8 Row1 INTERNAL_MIG_EMIGRATION 61
-9 Row1 INTERNATIONAL_MIG_EMIGRATION 11
-10 Row1 EMIGRATION_TOTAL 72
-11 Row2 NUTS2 AT31
-12 Row2 LAU2_CODE 41820
-13 Row2 LAU2_NAME Stadl-Paura
-14 Row2 YEAR 2002
-15 Row2 INTERNAL_MIG_IMMIGRATION 216
-16 Row2 INTERNATIONAL_MIG_IMMIGRATION 57
-17 Row2 IMMIGRATION_TOTAL 273
-18 Row2 INTERNAL_MIG_EMIGRATION 219
-19 Row2 INTERNATIONAL_MIG_EMIGRATION 41
-20 Row2 EMIGRATION_TOTAL 260
-21 Row3 NUTS2 AT31
-22 Row3 LAU2_CODE 41821
-23 Row3 LAU2_NAME Steinerkirchen an der Traun
-24 Row3 YEAR 2002
-25 Row3 INTERNAL_MIG_IMMIGRATION 82
-26 Row3 INTERNATIONAL_MIG_IMMIGRATION 11
-27 Row3 IMMIGRATION_TOTAL 93
-28 Row3 INTERNAL_MIG_EMIGRATION 74
-29 Row3 INTERNATIONAL_MIG_EMIGRATION 17
-30 Row3 EMIGRATION_TOTAL 91
-31 Row4 NUTS2 AT31
-32 Row4 LAU2_CODE 41822
-33 Row4 LAU2_NAME Steinhaus
-34 Row4 YEAR 2002
-35 Row4 INTERNAL_MIG_IMMIGRATION 42
-36 Row4 INTERNATIONAL_MIG_IMMIGRATION 10
-37 Row4 IMMIGRATION_TOTAL 52
-38 Row4 INTERNAL_MIG_EMIGRATION 48
-39 Row4 INTERNATIONAL_MIG_EMIGRATION 7
-40 Row4 EMIGRATION_TOTAL 55
-41 What is the INTERNATIONAL_MIG_IMMIGRATION for Steinhaus?	10	33 36
-
-
-** train 574 lines template2 77818
-test 451 lines
-
-
-** 21 epochs 2 hopes year
-
-** with linear start, time, position
-
-1) What is the INTERNAL_MIG_IMMIGRATION for Traun?	10	33 35
-Dictionary: 64
-Number of training examples 5901
-6 | train error: 0 | val error: 0
-Number of testing examples 3443
-Test error: 0.000000
-
-2) What is the EMIGRATION_TOTAL for Allhaming in 2006?	6	33 34 40
-overlap year
-
-50 epochs
-
-Dictionary: 65
-
-Number of training examples 5926
-50 | train error: 0.193581 | val error: 0.270313                
-Number of testing examples 3415
-Test error: 0.271521
-
-Number of training examples 6107
-50 | train error: 0.177303 | val error: 0.25744                 
-Number of testing examples 3214
-Test error: 0.265625
-
-Number of training examples 8593
-50 | train error: 0.0115438 | val error: 0.0237069              
-Number of testing examples 452
-Test error: 0.020089
-
-TO continue 100 epochs
-
-5) What is the EMIGRATION_TOTAL for Allhaming in 2006?	6	33 34 40
-overlap city/year shuffled
-
-Dictionary: 65
-Number of training examples 9947
-50 | train error: 0.203528 | val error: 0.265625                
-Number of testing examples 452
-Test error: 0.258929
-
-Dictionary: 65
-Number of training examples 18087
-47 | train error: 0 | val error: 0                              
-Number of testing examples 4903
-Test error: 0.000408
-
-6) INTERNATIONAL_MIG_IMMIGRATION Burgkirchen 2003?	9	13 14 16
-overlap city/year shuffled + question template stripped
-
-Dictionary: 60
-Number of training examples 7983
-
----
-
-7) INTERNATIONAL_MIG_IMMIGRATION Traun?	5	3 6
-single key + question template stripped + bow
-
-Dictionary: 60
-Number of training examples 5870
-15 | train error: 0 | val error: 0
-Number of testing examples 3477
-Test error: 0.000000
-
-
-
-1. What is the EMIGRATION_TOTAL for Helfenberg?	2	13 20
+What is the EMIGRATION_TOTAL for Helfenberg?	2	13 20
 IMMIGRATION_TOTAL in Burgkirchen?	4	3 7
-(simple key + 2 question templates + bow)
 
-Dictionary: 65
+
 Number of training examples 5949
 9 | train error: 0 | val error: 0                              
 Number of testing examples 3389
 Test error: 0.000298
 
 
-2. What is the INTERNAL_MIG_IMMIGRATION for Grieskirchen in 2004?	4	13 14 15
+2. Complex key
+What is the INTERNAL_MIG_IMMIGRATION for Grieskirchen in 2004?	4	13 14 15
 IMMIGRATION_TOTAL in Burgkirchen for 2002?	10240	23 24 27
-(complex key + 2 question templates + bow)
 
-Dictionary: 65
+
 Number of training examples 18953
 68 | train error: 0 | val error: 0                              
 Number of testing examples 3941
 Test error: 0.000762
 
-1+ unrestricted domain + simple key
-Dictionary: 2101
-Number of training examples 12618
-
-
-* Results
-
-Row-based formatting does not work error ~ 1
-
-Cell-based formatting:
-
-100 | train error: 0.148849 | val error: 0.535156
-Test error: 0.189338
 
 ### Acknowledgment
 
