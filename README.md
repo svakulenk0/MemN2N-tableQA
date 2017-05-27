@@ -1,5 +1,6 @@
 ## End-To-End Memory Networks for Question Answering on Tables
 
+For more details see [TableQA: Question Answering on Tabular Data](https://arxiv.org/abs/1705.06504)
 
 ## Demo
 
