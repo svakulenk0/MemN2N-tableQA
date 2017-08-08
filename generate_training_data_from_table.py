@@ -11,8 +11,25 @@ Created on Aug 8, 2017
 import csv
 
 
-DATA_DIR = './'
+DATA_DIR = './data/'
 SAMPLE_CSV_FILE = 'OOE_Wanderungen_Zeitreihe.csv'
+'''
+Question templates are the tuples of the form: 
+(natural language template for the question,
+ column labels with the values to fill in the template,
+ column label that contains answer to the question)
+'''
+QUESTION_TEMPLATES = [ 
+                       ('What is the lau2 code for %s', ['lau2_name'], 'lau2_code'),
+                       ('Which city has the lau2 code %s', ['lau2_code'], 'lau2_name'),
+                       ('Which town has the lau2 code %s', ['lau2_code'], 'lau2_name'),
+                       ('What was internal immigration in %s in %s', ['lau2_name', 'year'], 'internal_mig_immigration'),
+                       ('What was international immigration in %s in %s', ['lau2_name', 'year'], 'international_mig_immigration'),
+                       ('What was the total number of immigrants into %s for %s', ['lau2_name', 'year'], 'immigration_total'),
+                       ('What was the number of emigrants from %s for %s internally', ['lau2_name', 'year'], 'internal_mig_emigration'),
+                       ('What was the number of emigrants from %s for %s on the international level', ['lau2_name', 'year'], 'international_mig_emigration'),
+                       ('What was the total number of emigrants from %s for %s on both internal and international levels', ['lau2_name', 'year'], 'emigration_total'),
+                        ]
 
 
 def load_csv(file_name):
@@ -40,7 +57,7 @@ def table2cells(file_name):
     for i, row in enumerate(rows):
         cell_strs = []
         for j, cell in enumerate(row):
-            cell_str = "%s %s" % (header[j], cell)
+            cell_str = "%s %s" % (header[j], j)
             cell_strs.append(cell_str.lower().strip())
         row_strs.append(cell_strs)
     return row_strs
