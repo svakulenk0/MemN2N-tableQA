@@ -95,6 +95,14 @@ Under the following terms:
         <section id="architecture">
             <h1>Architecture</h1>
             <p>The architecture of our system for table-based question answering is summarized in Figure <a href="#figure_arch"></a>. Each of the individual components is described in further details below.</p>
+
+
+            <figure id="figure_arch">
+                    <p>
+                        <img src="./img/archTableQA.pdf" />
+                    </p>
+                    <figcaption>System architecture. T - input table; Q - question; A - answer.</figcaption>
+                </figure>
             
             <section>
                 <h1>Table Representation</h1>
@@ -102,7 +110,7 @@ Under the following terms:
                 Training examples consist of the input table decomposed into row-column-value triples and a question/answer pair, for instance: 
 
                 <figure id="table_1">
-                    <table>
+                    <table border="1">
                         <tr>
                             <td rowspan="1" colspan="1"><p>Row1</p></td>
                             <td rowspan="1" colspan="1"><p>City</p></td>
@@ -157,9 +165,11 @@ Under the following terms:
                 <p>The network is trained using stochastic gradient descent with linear start to avoid the local minima as in <a href="#SukhbaatarSWF15"></a>. The objective function is to minimize the cross-entropy loss between the predicted answer and the true answer from the training set.</p>
 
                 <figure id="figure_ui">
-                    <p>
-                        <img src="./img/screen3.png" />
-                    </p>
+                    <a href="https://svakulenko.ai.wu.ac.at/tableqa">
+                        <p>
+                            <img src="./img/screen3.png" />
+                        </p>
+                    </a>
                     <figcaption>Demonstration of the neural network model trained towards question answering from tables. The highlighted cells and their intensity indicate the attention weights over the input table that were activated to predict the answer to the input question.</figcaption>
                 </figure>
 
@@ -201,13 +211,13 @@ Under the following terms:
         <section id="bibreflist" role="doc-bibliography">
             <h1>References</h1>
             <ol>
-                <li id="Per2014" role="doc-biblioentry"><p>Piotr Bojanowski, Edouard Grave, Armand Joulin, and Tomas Mikolov. 2016. Enriching word vectors with subword information. arXiv preprint arXiv:1607.04606. <a href="https://arxiv.org/abs/1607.04606.pdf">https://arxiv.org/abs/1607.04606.pdf</a></p></li>
-                <li id="Per2014" role="doc-biblioentry"><p>Arvind Neelakantan, Quoc V. Le, Martín Abadi, Andrew McCallum, and Dario Amodei. 2016. Learning a natural language interface with neural programmer. CoRR abs/1611.08945. <a href="http://arxiv.org/abs/1611.08945">http://arxiv.org/abs/1611.08945</a></p></li>
-                <li id="Per2014" role="doc-biblioentry"><p>Sebastian Neumaier, Vadim Savenkov, and Svitlana Vakulenko. 2017. Talking open data. In 14th Extended Semantic Web Conference, ESWC 2017, Portoroz, Slovenia, May 28 - June 1, 2017. <a href="https://arxiv.org/abs/1705.00894.pdf">https://arxiv.org/abs/1705.00894.pdf</a></p></li>
-                <li id="Per2014" role="doc-biblioentry"><p>Sainbayar Sukhbaatar, Arthur Szlam, Jason Weston, and Rob Fergus. 2015. End-to-end memory networks. In Advances in Neural Information Processing Systems 28: Annual Conference on Neural Information Processing Systems 2015, December 7- 12, 2015, Montreal, Quebec, Canada. pages 2440– 2448. <a href="http://papers.nips.cc/paper/5846-end-to-end-memory-networks">http://papers.nips.cc/paper/5846-end-to-end-memory-networks.</a></p></li>
-                <li id="Per2014" role="doc-biblioentry"><p>Huan Sun, Hao Ma, Xiaodong He, Wen-tau Yih, Yu Su, and Xifeng Yan. 2016. Table cell search for question answering. In Proceedings of the 25th International Conference on World Wide Web, WWW 2016, Montreal, Canada, April 11 - 15, 2016. pages 771– 782. <a href="https://doi.org/10.1145/2872427.2883080">https://doi.org/10.1145/2872427.2883080.</a></p></li>
-                <li id="Per2014" role="doc-biblioentry"><p>Jason Weston, Antoine Bordes, Sumit Chopra, and Tomas Mikolov. 2015. Towards AI-complete question answering: A set of prerequisite toy tasks. CoRR abs/1502.05698. <a href="http://arxiv.org/abs/1502.05698">http://arxiv.org/abs/1502.05698.</a></p></li>
-                <li id="Per2014" role="doc-biblioentry"><p>Pengcheng Yin, Zhengdong Lu, Hang Li, and Ben Kao. 2016. Neural enquirer: Learning to query tables in natural language. In Proceedings of the Twenty-Fifth International Joint Conference on Arti cial Intelligence, IJCAI 2016, New York, NY, USA, 9-15 July 2016. pages 2308–2314. <a href="http://www.ijcai.org/Abstract/16/329">http://www.ijcai.org/Abstract/16/329.</a></p></li>
+                <li id="bojanowski2016enriching" role="doc-biblioentry"><p>Piotr Bojanowski, Edouard Grave, Armand Joulin, and Tomas Mikolov. 2016. Enriching word vectors with subword information. arXiv preprint arXiv:1607.04606. <a href="https://arxiv.org/abs/1607.04606.pdf">https://arxiv.org/abs/1607.04606.pdf</a></p></li>
+                <li id="NeelakantanLAMA16" role="doc-biblioentry"><p>Arvind Neelakantan, Quoc V. Le, Martín Abadi, Andrew McCallum, and Dario Amodei. 2016. Learning a natural language interface with neural programmer. CoRR abs/1611.08945. <a href="http://arxiv.org/abs/1611.08945">http://arxiv.org/abs/1611.08945</a></p></li>
+                <li id="us" role="doc-biblioentry"><p>Sebastian Neumaier, Vadim Savenkov, and Svitlana Vakulenko. 2017. Talking open data. In 14th Extended Semantic Web Conference, ESWC 2017, Portoroz, Slovenia, May 28 - June 1, 2017. <a href="https://arxiv.org/abs/1705.00894.pdf">https://arxiv.org/abs/1705.00894.pdf</a></p></li>
+                <li id="SukhbaatarSWF15" role="doc-biblioentry"><p>Sainbayar Sukhbaatar, Arthur Szlam, Jason Weston, and Rob Fergus. 2015. End-to-end memory networks. In Advances in Neural Information Processing Systems 28: Annual Conference on Neural Information Processing Systems 2015, December 7- 12, 2015, Montreal, Quebec, Canada. pages 2440– 2448. <a href="http://papers.nips.cc/paper/5846-end-to-end-memory-networks">http://papers.nips.cc/paper/5846-end-to-end-memory-networks.</a></p></li>
+                <li id="SunMHYSY16" role="doc-biblioentry"><p>Huan Sun, Hao Ma, Xiaodong He, Wen-tau Yih, Yu Su, and Xifeng Yan. 2016. Table cell search for question answering. In Proceedings of the 25th International Conference on World Wide Web, WWW 2016, Montreal, Canada, April 11 - 15, 2016. pages 771– 782. <a href="https://doi.org/10.1145/2872427.2883080">https://doi.org/10.1145/2872427.2883080.</a></p></li>
+                <li id="WestonBCM15" role="doc-biblioentry"><p>Jason Weston, Antoine Bordes, Sumit Chopra, and Tomas Mikolov. 2015. Towards AI-complete question answering: A set of prerequisite toy tasks. CoRR abs/1502.05698. <a href="http://arxiv.org/abs/1502.05698">http://arxiv.org/abs/1502.05698.</a></p></li>
+                <li id="YinLLK16" role="doc-biblioentry"><p>Pengcheng Yin, Zhengdong Lu, Hang Li, and Ben Kao. 2016. Neural enquirer: Learning to query tables in natural language. In Proceedings of the Twenty-Fifth International Joint Conference on Arti cial Intelligence, IJCAI 2016, New York, NY, USA, 9-15 July 2016. pages 2308–2314. <a href="http://www.ijcai.org/Abstract/16/329">http://www.ijcai.org/Abstract/16/329.</a></p></li>
                 
             </ol>
         </section>
