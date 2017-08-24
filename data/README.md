@@ -1,1 +1,1 @@
-This folder should contain the bAbI dataset v1.2 from [fb.ai/babi](http://fb.ai/babi).
+This folder contains a sample CSV table from https://www.data.gv.at/katalog/dataset/2f0dc254-81f9-468c-a2a7-45ee2b5deb08
