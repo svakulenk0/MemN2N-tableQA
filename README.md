@@ -107,3 +107,18 @@ train error: 0 | val error: 0
 ## Related Work
 * [YerevaNN: Dynamic-memory-networks-in-Theano](https://github.com/YerevaNN/Dynamic-memory-networks-in-Theano)
 * Kumar et al. [Dynamic memory networks](http://arxiv.org/abs/1506.07285)
+
+## Citation
+
+```bibtex
+@inproceedings{DBLP:conf/i-semantics/VakulenkoS17,
+  author    = {Svitlana Vakulenko and
+               Vadim Savenkov},
+  title     = {TableQA: Question Answering on Tabular Data},
+  booktitle = {Proceedings of the Posters and Demos Track of the 13th International
+               Conference on Semantic Systems - SEMANTiCS2017 co-located with the
+               13th International Conference on Semantic Systems (SEMANTiCS 2017),
+               Amsterdam, The Netherlands, September 11-14, 2017},
+  year      = {2017}
+}
+```
